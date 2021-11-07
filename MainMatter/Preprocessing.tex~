@@ -1,0 +1,157 @@
+\chapter{Normalización de los Datos}
+\label{chap:prep}
+
+Un \emph{Tweet} es un mensaje de 140 caracteres donde es común encontrar gran uso de abreviaturas y jerga
+de la web, por lo general para expresar opiniones se utiliza gran diversidad de emoticones y se deforma el
+lenguaje ya que la ortografía y la gramática del idioma no son muy relevantes en estos mensajes. Es muy
+usual que porten etiquetas y marcas propias de \emph{Twitter} como las de usuario, tópicos o \emph{reTweet}~(utilizado
+para indicar que algún usuario replicó el mensaje) y que hagan referencia a diferentes sitios de la web.
+
+\begin{verbatim}
+bloggerscuba >Ya vieron el artículo de Global Voices? http://bit.ly/7uPumv
+
+yudivian jajaja :D
+
+RT yudivian: Vas a estar pa record roger213tm dos #nutella 
+in one week &lt;- Por lo menos tremendo average :P
+
+RT MaiteLpez: caroboris NUnca estare en el grupo de industriale 
+sen Facebook ni en ningun lugar #VillaClara campeon &lt;- #EPD
+
+RT: oxigeno: roger213tm por las #torticas!! &lt;- SSSSSufre... ajaja
+
+nos perdimos de aki jijiji
+
+&lt;(o-o)&gt;
+\end{verbatim}
+
+En la web los mensajes no están sujetos a estrictas reglas sintácticas del lenguaje \cite{ref1} lo que dificulta la
+aplicación de algoritmos de minería de opinión sobre ellos. Por tanto se propone un proceso de conversión
+de los \emph{Tweets} a lenguaje natural. La primera diferencia de un \emph{Tweet} con un texto en lenguaje natural es
+el uso indiscriminado de abreviaturas y jerga utilizada en la web debido a la restricción en la longitud de
+140 caracteres.La jerga también llamada \emph{netspeak}~(uso informal de palabras y expresiones que no están
+consideradas en el idioma o dialecto del hablante) ofrece como resultado más de una abreviatura para
+una única palabra lo que en el entrenamiento provoca que el peso de la palabra quede repartido entre las
+variaciones de la misma o en la clasificación una de las variaciones obtenga un peso mínimo aunque la
+palabra esté entre los términos determinantes a la hora de clasificar. Por tanto es evidente la necesidad de
+traducir la jerga a un lenguaje más convencional, para esto se propone el uso de diccionarios en diferentes
+idiomas~(español e inglés) de la forma: jerga--idioma que se consultará para la conversión.
+
+También es frecuente la utilización de emoticones o \emph{smileys} empleados para darle expresividad al
+mensaje dado que internet es un medio frío y a menudo se desean expresar opiniones positivas o negativas.
+A los emoticones se le da usos más complejos de detectar como es la ironía, de ahí que sean muy
+importantes al realizar un análisis de sentimientos. Se dispone de un diccionario con 144 emoticones y
+las frases que definen su semántica lo más breve posible.
+Como parte del preprocesamiento se hace tratamiento para evitar las diferencias entre mayúsculas y
+minúsculas que pueden suponer diferencias para el ordenador cuando realmente se hace referencia a la
+misma palabra~(Ejemplo: Hola, hola, hOlA, HOLA). Este paso consiste simplemente en convertir todo
+a minúsculas.
+
+Una deformación común en internet es la modificación de la sintaxis de las palabras repitiendo
+caracteres dentro de la misma con el objetivo de enfatizarla~(Ejemplo: "hooooooola"). Generalmente
+la mayor o menor presencia de este efecto está muy ligado al tipo de contenido con que se trabaja y
+dentro de este al estilo propio del autor. En las páginas de noticias escritas por periodistas normalmente
+hay un mayor control de la ortografía mientras que las páginas de reseñas o en los blogs este fenómeno
+es mucho más frecuente y en \emph{Twitter} su presencia se acentúa todavía más ya que en este lenguaje no
+es relevante la ortografía. Para un análisis posterior del texto es necesario suprimir las letras repetidas,
+pero existen palabras correctas con más de un carácter igual consecutivo~(Ejemplo: \emph{good}, acción). Por
+lo tanto se propone suprimir los caracteres repetidos hasta dos ocurrencias. Existe otro problema y es
+que no todas las palabras con 2 caracteres repetidos son transformadas y pueden haber sido escritas
+incorrectamente por lo que llegado a este punto se utiliza un corrector ortográfico que determine las
+palabras correctas. Si el corrector da más de una forma correcta para la misma palabra esta se deja como
+está en el texto al igual que si no se encuentra ninguna forma correcta y se continua con el proceso de
+análisis.
+
+En \emph{Twitter} es relativamente común la utilización de referencias a otros sitios de la web con frecuencia
+blogs, noticias o reseñas. La dirección de estos sitios, generalmente acortada usando un servicio específico
+para ese fin, aparece en el propio mensaje. El problema surge cuando en la URL se encuentran palabras
+que pueden influir sobre el clasificador de forma no deseada. Por esto es necesario eliminarlas ya que
+forman parte del texto del mensaje
+En un \emph{Tweet} se hace referencia no solo a sitios de internet, también pueden hacerse referencias a
+otros usuarios de \emph{Twitter} a un tópico en especial o a otros \emph{Tweets} mediante el uso de marcas o etiquetas
+propias de \emph{Twitter} que aparecen en el texto y pueden influir de la misma manera que las URL sobre los
+clasificadores por lo tanto también son eliminadas.
+Al finalizar este preprocesamiento se considera que el \emph{Tweet} se encuentra en lenguaje natural y se
+respetan los signos de puntuación que serán utilizados en análisis posteriores.
+
+%--------------------------------
+Como se describe anteriormente el determinar el idioma del \emph{Tweet} permite cargar los diccionarios de
+archivos de texto, según el idioma determinado. Aunque en una primera etapa solo se considerarán
+mensajes en Español y posteriormente en Inglés. También se carga por defecto el diccionario de emoticones
+que no depende del idioma del texto. Los diccionarios están almacenados en archivos de texto~(de la forma
+jerga/emoticon : significado):
+
+\begin{verbatim}
+
+CU2MORO : ”See you tomorrow”
+
+Googlear : Buscar en Google
+
+:-] : positivo
+
+’] :’ : negativo
+\end{verbatim}
+
+El procesamiento sobre el \emph{Tweet} es eliminar las etiquetas de \emph{Twitter} y las URLs mediante un autómata
+finito determinista que elimina todos los caracteres detrás de un $\sharp$ o que se reconozca como
+la dirección de un sitio. También se elimina la etiqueta ”RT” si se encuentra en cualquiera de sus
+formas~(rt, Rt, rT) y si está rodeada de espacios ya que de lo contrario se pueden eliminar partes de
+palabras correctas.
+Para identificar los emoticones se propone el uso de expresiones regulares y el diccionario de emoticones
+para crearlas. Estos son eliminados del texto para que no se confundan con la jerga o signos de
+puntuación y evitar que cambien de sentido debido a otras transformaciones.
+Para analizar el texto es necesario encontrar una unidad básica~(en nuestro caso utilizamos las palabras. 
+Se entenderá por palabra inicialmente el resultado de dividir el \emph{Tweet} por espacios. Luego cada
+palabra es verificada contra el diccionario de jerga después de convertirla a minúsculas y si no se considera
+jerga se divide la palabra en los grupos continuos de puntuación y de caracteres alfabéticos donde
+los últimos continúan siendo procesados como palabras nuevas.
+Las nuevas palabras se vuelven a comparar con jerga y se les suprimen los caracteres repetidos hasta
+dos ocurrencias para luego verificar la palabra correcta mediante los algoritmos de corrección ortográfica.
+
+\section{Stemming}
+Para el \emph{stemming} se propone una variante del algoritmo de Porter para Español de la 
+librería nltk. Al algoritmo original se le hicieron varios cambios:
+\begin{itemize}
+ \item Considerar los sufijos: ito ita azo aza itos itas azos azas
+ de los diminutivos y aumentativos.
+ \item Se agrega la regla de que estos sufijos solo se podrán eliminar si lo que queda de la palabra es
+ mayor o igual a tres caracteres.
+ \item Se agrega la regla de que estos sufijos solo se podrán eliminar si al agregar la 
+ última letra del sufijo al resto de la palabra, esta tiene sentido~(aparece en los diccionarios).
+\end{itemize}
+
+Ejemplo:
+
+perr\emph{ito} 
+perro (aparece en el diccionario)
+--------------
+perr
+
+suscr\emph{ito}
+suscro (no aparece en el diccionario)
+------------
+suscrit
+
+\section{Stop Words}
+
+Las \emph{stop words} son palabras que serán eliminadas una vez que sean encontradas en el texto.
+Para esto se trabajo en un listado de palabras propuestas en diferentes sitios de internet 
+como las \emph{stop words} más utilizadas, pero varias de estas palabras pueden aportar 
+semántica a la opinión que se da en el mensaje. Por lo tanto se propone no incluir:
+
+\begin{center}
+\begin{tabular}{c c c}
+  no & muy & ni \\
+  si & contra & algunos \\
+  pero & tanto & algunas \\
+  más & mucho & poco \\ 
+  como & nada & algo \\ 
+  tanto & muchos & entonces \\
+  cierto & bajo & verdad \\
+  ciertos & arriba & verdadero \\
+  ciertas & encima & verdadera \\
+  cierta & valor & modo \\
+  bien & mientras & \\
+\end{tabular} 
+\end{center}
+

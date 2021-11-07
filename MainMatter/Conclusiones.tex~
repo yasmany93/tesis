@@ -1,0 +1,21 @@
+\chapter{Conclusiones}
+\label{chap:concl}
+
+En el presente trabajo se propone una metodología para 
+el proceso de minería de opinión sobre \emph{Twitter}, basada en la hipótesis 
+de que existen clasificadores que se adaptan mejor a la estructura del
+problema y por lo tanto devuelven mejores resultados que el resto.
+La propuesta final presentada en los resultados confirma la hipótesis
+a partir del conjunto de clasificadores que se validaron.
+
+A partir de los experimentos realizados con los diferentes
+preprocesamientos propuestos se determinó que no son 
+influyentes las variaciones en el proceso de normalización
+del texto. Aunque es necesario realizar un proceso básico 
+que al menos elimine los signos de puntuación y separe correctamente 
+las palabras. Algunos de los preprocesamientos probados
+provocan errores en la clasificación como la 
+corrección ortográfica, que provoca que un gran número de
+términos que no aparecen en los diccionarios sean modificados 
+y cambien el sentido del documento.
+

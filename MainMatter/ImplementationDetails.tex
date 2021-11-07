@@ -1,0 +1,194 @@
+\chapter{Detalles de Implementación}
+  Para la implementación del sistema propuesto en el capítulo anterior, se
+decidió utilizar \emph{Python}\footnote{\url{http://www.python.org}} como
+lenguaje de programación. Esta decisión permite aprovechar las facilidades para
+el trabajo con expresiones regulares y la integración con los sistemas
+\emph{Linux} que brindan la librería estándar del lenguaje. La programación del
+sistema en \emph{Python} permite el uso del módulo \texttt{pyro} para realizar
+la comunicación entre los agentes mediante un modelo \emph{RMI}.
+
+La implementación del sistema fue concebida mediante el desarrollo de clases que
+representaran las diferentes componentes de diseño que lo integran. Estas clases
+representan el comportamiento de cada componente en el sistema
+independientemente del proceso de análisis relativo a cada servicio. Este diseño
+permite añadir un nuevo servicio a analizar con cierta independencia del
+comportamiento de los agentes así como de la comunicación entre ellos.
+
+Para la instrumentación de un servicio en el sistema es necesario establecer el
+comportamiento de cada componente para realizar su función. Las particularidades
+de cada componente así como los requerimientos para la puesta en práctica de un
+nuevo servicio se explican a continuación.
+
+Es importante destacar que para un funcionamiento consistente entre todas las
+componentes del sistema, es necesario que tanto los servicios como los agentes
+sean identificadas de un modo único dentro del mismo. Por esta razón cada
+componente del sistema recibe como parámetro una llave que la identifica a ella
+(\texttt{node\_key}) así como la llave del servicio que va a analizar
+(\texttt{service\_key}).
+
+\section{Collector}
+El funcionamiento de la componente \textit{Collector} se definió en el módulo
+\texttt{packages.collector}, que contiene una clase llamada \texttt{Collector}
+que se encarga de realizar el procedimiento general de esta componente. O sea,
+de llamar al método encargado de obtener una tupla cada cierto tiempo y una vez
+obtenida esta, enviarla de forma distribuida a los \textit{storages} y los
+\textit{analyzers} correspondientes a este en el sistema.  
+
+Es importante destacar que la conformación de una tupla depende de las
+caracteríticas del servicio en cuestión y el formato de las trazas que este
+genera. Para la generalización de esta tarea se definió una \textit{interface}, 
+llamada \texttt{DataCollector} compuesta únicamente por un método denominado
+\texttt{collect\_data}. Este se encarga de la conformación de una tupla a partir
+de los últimos registros recolectados en el archivo de trazas, desde la última
+lectura o desde la hora de inicio de la componente. 
+
+El tiempo que se debe esperar para conformar una nueva tupla es recibido como
+parámetro (denominado \texttt{time\_delta}) en el constructor de la clase
+\texttt{Collector}. La primera tupla se conforma con los datos recolectados
+después de transcurrido dicho tiempo a partir del inicio de la ejecución de esta
+componente. Luego, entre la conformación de una tupla y la siguiente se esperará
+el tiempo estipulado. El valor asociado al parámetro \texttt{time\_delta} debe
+ser un divisor del total de horas que conforman un día para garantizar que
+exista la misma cantidad de intervalos cada día.
+
+Las tuplas construidas por el \emph{DataCollector} deben contener la fecha y el
+número del intervalo a los que corresponden el resto de los datos. Estos últimos
+serán los valores asociados a las variables que sean seleccionadas para
+caracterizar a dicho servicio. 
+
+\section{Model Builder}
+El funcionamiento del \textit{Model Builder} se definió en el módulo \\
+\texttt{packages.model\_builder}, donde se declaró una clase llamada \\
+\texttt{ModelBuilder} que se encarga de reconstruir cada cierto tiempo los
+modelos de comportamientos ``normales'' de los servicios que le han sido
+asociados. Para ello, obtiene los datos almacenados en los \textit{storages}
+para cada uno de estos servicios y llama pasándole cada uno de estos conjuntos,
+al método encargado de construir un modelo que represente los patrones de
+comportamiento ``normal'' de un conjunto de datos. Luego, actualiza los modelos
+asociados a cada servicio con los obtenidos para cada uno de ellos.
+
+La construcción de un modelo que represente los patrones de comportamiento
+``normal'' asociados a un conjunto de datos, dependiendo de la naturaleza de
+estos, se puede realizar utilizando diferentes algoritmos. En conjunto, estos
+pueden determinar la representación del modelo. Para permitir la utilización de
+cualquier algoritmo y cualquier representación posible de un modelo, se definió
+una \textit{interface} llamada \texttt{DataModelBuilder} compuesta únicamente
+por un método denominado \texttt{get\_model}. Este se encarga de construir un
+modelo de patrones de comportamiento ``normal'' para el conjunto de datos
+recibido. 
+
+El tiempo que se debe esperar para la reconstrucción de los modelos es recibido
+como parámetro (se denominó \texttt{time}) en el constructor de la clase
+\texttt{ModelBuilder}. La primera reconstrucción se realizará después de
+transcurrido dicho tiempo a partir de la hora de inicio de esta componente.
+Posteriormente, se esperara el tiempo estipulado entre una reconstrucción y
+otra.
+
+\section{Analyzer}
+El funcionamiento de la componente \textit{Analyzer} se definió en el módulo
+\texttt{packages.analyzer}, que contiene una clase llamada \texttt{Analyzer} que
+se encarga de realizar el procedimiento general de esta componente. O sea,
+obtener el modelo asociado al servicio al que pertenece la tupla que se está
+analizando, llamar al método que se encarga de determinar si esta constituye o
+no una anomalía basándose en dicho modelo, y posteriormente cambiar el tipo
+asociado a esta por el obtenido por este método en los \textit{storages}. En
+caso de que sea catalogada de anomalía esta será enviada de forma distribuida a
+los \textit{classifiers} del sistema. 
+
+La determinación de si una tupla constituye o no una anomalía depende de las
+características del servicio y de la representación del modelo. Por este motivo,
+para la generalización de esta tarea se definió una \textit{interface} llamada
+\texttt{DataAnalyzer} compuesta únicamente por un método denominado
+\texttt{analyze}. Este se encarga de determinar si los valores asociados a cada
+una de las variables que caracterizan al servicio en dicha tupla se encuentran
+dentro de los perfiles de normalidad. En caso de que todos se salgan de dichos
+perfiles, se clasifica como anomalía y en cualquier otro caso se clasifican como
+comportamiento ``normal''. 
+
+\section{Classifier}
+El funcionamiento de la componente \textit{Classifier} se definión en el módulo
+\texttt{packages.classifier}, compuesto por una clase llamada
+\texttt{Classifier} que realiza la llama al método encargado de clasificar las
+anomalías detectadas y cambiar las clasificaciones asociadas a dicha tupla en
+los \textit{storages} donde fue almacenada. 
+
+La clasificación de una tupla depende de las características del servicio en
+cuestión, por ello para garantizar la integración de cualquier implementación
+posible para la realización de esta tarea se definió una \textit{interface}
+denominada \texttt{DataClassifier}. Dicha interfaz está compuesta solamente por
+un método llamado \texttt{classify} que se encarga de determinar las
+clasificaciones asociadas a una anomalía teniendo en cuenta sus características.
+Estas clasificaciones expresan las causas posibles o los errores subyacentes que
+pudieron haber provocado su ocurrencia.
+
+
+\section{Manager}
+El funcionamiento de la componente \textit{Manager} se definió en el módulo
+\texttt{packages.manager}, que contiene una clase llamada \texttt{Manager} que
+se encarga del funcionamiento general de dicha componente. Esta realiza la
+llamada al método que se encarga de determinar las acciones que se deben
+realizar para recuperarse de la ocurrencia de una anomalía. Posteriormente,
+cambia las acciones asociadas a dicha tupla en los \textit{storages} en que ha
+sido almacenada y ejecuta las funciones asociadas a las mismas pasándole como
+parámetro la tupla y las clasificaciones asociadas a la misma. Dichas funciones
+deben encontrarse definidas en un módulo denominda \texttt{functions} dentro del
+propio módulo del servicio en cuestión. 
+
+Para la determinación de las acciones asociadas a una anomalía pueden utilizarse
+varias metodologías y algortimos, por este motivo para su generalización se
+definió una \textit{interface} denominada \texttt{DataManager} compuesta
+únicamente por un método llamado \texttt{manage}. Este se encarga de determinar
+las acciones asociadas a una anomalía teniendo en cuenta sus características y
+las clasificaciones asociadas a esta. 
+
+\section{Storage}
+El funcionamiento de la componente \textit{Storage} se definió en el módulo
+\texttt{packages.storage}, que contiene una clase llamada \texttt{Storage} que
+se encarga de manejar las peticiones a la clase encargada del almacenamiento de
+datos de los servicios que le han sido asociados en el sistema. 
+
+Como se pudo observar en el capítulo anterior, la componente \textit{Storage} 
+debe almacenar todas las tuplas recolectadas de los servicios que le han sido 
+asociados, el tipo asociado a estas, las clasificaciones que le han sido 
+asociadas a cada una de ellas, las acciones asociadas a cada clasificación y el 
+modelo correspondiente a cada servicio. La forma de almacenar estas depende de 
+las necesidades del usuario y de las características de los servicios. Por este 
+motivo, para la generalización de estas tareas se definió una \textit{interface} 
+llamada \texttt{DataStorage} compuesta por los siguientes métodos: 
+\begin{itemize}
+ \item \texttt{store(service\_key, tuple)}: Almacena la tupla dada asociada al
+  servicio que representa la llave recibida. Es el método llamado por el
+  \texttt{Collector} para almacenar una nueva tupla.
+ \item \texttt{get\_data(service\_key)}:  Devuelve todas las tuplas asociadas al
+  servicio que representa la llave dada. Es el método llamado por el
+  \texttt{ModelBuilder} para la obtención de todos los datos asociados a un
+  servicio específico.
+ \item \texttt{get\_model(service\_key)}: Devuelve el modelo asociado al
+  servicio que representa la llave dada. Este método es el que llama el
+  \texttt{Analyzer} para obtener el modelo asociado a un servicio.
+ \item \texttt{update\_model(service\_key, model)}: Actualiza el modelo asociado
+  al servicio que representa la llave dada por el modelo recibido. Este método es
+  el que llama el \texttt{ModelBuilder} para cambiar el modelo asociado a un
+  servicio por el nuevo modelo construido.
+ \item \texttt{set\_type(service\_key, tuple, type)}: Cambia el tipo asociado a
+  a la tupla dada del servicio especificado por el tipo recibido. Este método es
+  el que llama el \texttt{Analyzer} para cambiar el tipo asociado a una tupla.
+ \item \texttt{get\_type(service\_key, tuple)}: Devuelve el tipo asociado a la
+  tupla recibida del servicio dado. 
+ \item \texttt{set\_classifications(service\_key, tuple, classifications)}:
+  Cambia las clasificaciones asociadas a la tupla dada del servicio especificado
+  por las las recibidas. Este método es el que llama el \texttt{Classifier} para
+  cambiar las clasificaciones asociadas una tupla.
+ \item \texttt{add\_classification(service\_key, tuple, classification)}: Añade 
+  la clasificación recibida a la tupla dada del servicio especificado.
+ \item \texttt{get\_classifications(service\_key, tuple)}: Devuelva las 
+  clasificaciones asociadas a la tupla recibida del servicio dado.
+ \item \texttt{set\_actions(service\_key, classification, actions)}: Cambia las 
+  acciones asociadas a la clasificación dada del servicio especificado por las 
+  recibidas. Este método es el que llama el \texttt{Manager} para cambiar las 
+  acciones asociadas a una clasificación.
+ \item \texttt{add\_action(service\_key, classification, action)}: Añade la
+  acción recibida a la clasificación dada del servicio especificado.
+ \item \texttt{get\_actions(service\_key, classification)}: Devuelve las
+  acciones asociadas a la clasificación dada del servicio especificado. 
+\end{itemize}

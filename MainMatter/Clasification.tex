@@ -1,0 +1,49 @@
+\chapter{Clasificación}
+\label{chap:clas}
+
+	La clasificación de los mensajes se divide en dos etapas:
+	
+	\begin{itemize}
+	\item Determinar si el mensaje es objetivo o subjetivo.
+	\item Clasificar los mensajes subjetivos en positivos o negativos.
+	\end{itemize}
+	
+	Se propone la experimentación con los mismos clasificadores en las dos
+	etapas, ya que ambas enfrentan el mismo problema teórico.
+
+	El aprendizaje supervisado parece una alternativa natural para enfrentar este
+	problema, ya que se desea asignar a cada mensaje una clasificación única.
+	El conjunto de entrenamiento se construye a partir de la clasificación
+	manual por parte de especialistas~(en este caso los autores) de una lista
+	de \emph{tweets} extraídos del sitio de \emph{Twitter} empleando herramientas
+	desarrolladas en la facultad para este propósito. Es necesario notar que 
+	incluso la tarea de clasificación manual es difícil, debido a la ambigüedad
+	inherente a estos mensajes. Por este motivo se ha escogido~(intentado confeccionar
+	un conjunto de entrenamiento seleccionando) los mensajes que para un humano
+	tienen una orientación bien definida, obviando los mensajes donde los clasificadores
+	humanos estuvieron en desacuerdo.
+	
+	Los clasificadores empleados reciben un conjunto de entrenamiento en 
+	la etapa de aprendizaje, que en este caso es obtenido a partir de un archivo de
+	texto con una entrada por línea de la forma
+	\verb|MENSAJE ====> CLASE|, donde la clase asignada es \verb|OBJETIVO|,
+	\verb|NEGATIVO| o \verb|POSITIVO|.
+	
+	Existen varios algoritmos de clasificación, teniendo en cuenta el problema que se desea 
+	resolver se eligieron para probar aquellos que son más recomendados en la literatura:
+	\begin{itemize}
+	    \item Naive Bayes.
+	    \item Máquinas de soporte vectorial~(SVM).
+	    \item Redes Neuronales.
+	    \item K vecinos más cercanos.
+	    \item Árboles de decisión.
+	    \item Redes Bayesianas.
+	    \item Máxima entropía.
+	\end{itemize}
+  
+	La mayoría de los clasificadores utilizados forman parte de la herramienta \emph{sklearn}.
+	La que cuenta con gran variedad de algoritmos de aprendizaje. Además contiene operaciones y estructuras
+	de datos diseñadas para trabajar con vectores esparcidos y realizar validaciones sobre los resultados
+	obtenidos. 
+	
+

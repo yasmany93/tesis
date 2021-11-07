@@ -1,0 +1,12 @@
+\chapter{Conclusiones}
+\label{chap:concl}
+
+En el presente trabajo se propone una metodología para 
+el proceso de minería de opinión sobre \emph{Twitter}, basada en la hipótesis 
+de que existen clasificadores que se adaptan mejor a la estructura del
+problema y por lo tanto devuelven mejores resultados que el resto.
+La propuesta final presentada en los resultados confirma la hipótesis
+a partir del conjunto de clasificadores que se validaron.
+
+A partir de los experimentos realizados con los diferentes
+preprocesamientos propuestos

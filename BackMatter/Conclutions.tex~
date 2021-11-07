@@ -1,0 +1,68 @@
+\begin{conclusions}
+En el presente trabajo se propuso una metodología para 
+el proceso de minería de opinión sobre \emph{Twitter}, basada en la hipótesis 
+de que existen clasificadores que se adaptan mejor a la estructura del
+problema y por lo tanto devuelven mejores resultados que el resto.
+La propuesta final presentada en los resultados cumple con 
+los objetivos marcados en este trabajo.
+
+Como parte del mismo se analizaron las distintas fases del 
+proceso de minería de opinión y su aplicación a \emph{Twitter}.
+Además se construyeron diccionarios para el trabajo con jerga, emoticones
+y corrección ortográfica en español.
+
+Para validar los experimentos se construyó un corpus de \emph{tweets}
+clasificados en objetivo, positivo, negativo, neutro
+en español. Sobre el mismo se analizaron diferentes propuestas,
+determinando el mejor algoritmo en cada una de las fases. Finalmente
+se presenta una propuesta completa para el proceso de minería de opinión.
+
+% A partir de los experimentos realizados con los diferentes
+% preprocesamientos propuestos se determinó que no son 
+% influyentes las variaciones en el proceso de normalización
+% del texto. Aunque es necesario realizar un proceso básico 
+% que al menos elimine los signos de puntuación y separe correctamente 
+% las palabras. Algunos de los preprocesamientos probados
+% provocan errores en la clasificación como la 
+% corrección ortográfica, que provoca que un gran número de
+% términos que no aparecen en los diccionarios sean modificados 
+% y cambien el sentido del documento.
+\end{conclusions}
+
+\begin{recomendations}
+La investigación discutida en la tesis puede generalizarse
+extendiendo la metodología propuesta a otros idiomas. Esto 
+provoca cambios fundamentalmente en la etapa de preprocesamiento
+donde se utilizan varios diccionarios y procesos que dependen del idioma 
+utilizado~\footnote{diccionario de emoticones, diccionario de jerga, corrección 
+ortográfica}. Para algunos de estos diccionarios se brinda una primera 
+aproximación para idioma inglés, que no fue utilizada en este trabajo.
+La metodología propuesta de manera general si es independiente del 
+del idioma en el que estén los datos.
+
+Para enriquecer los resultados propuestos pueden realizarse 
+experimentos con nuevos algoritmos o variantes de los 
+propuestos. En el trabajo se propone la utilización de algoritmos
+estándares sin una parametrización exhaustiva de los mismos,
+para poder realizar un análisis general de la propuesta. Por lo tanto 
+pueden realizarse mejoras a los mismos.
+
+El tamaño del corpus tiene una gran influencia sobre la precisión
+de los resultados obtenidos. En consecuencia se propone continuar incrementando 
+el corpus propuesto, utilizando la aplicación creada para la 
+clasificación de mensajes. 
+
+La tesis se concentra en la clasificación de mensajes sin tener en cuenta 
+información semántica de los mismos. Una propuesta a largo 
+plazo puede incluir clasificadores que utilicen información adicional
+como los emoticones, relaciones de sinonimia, aparición de signos de puntuación 
+especiales y conocimiento sobre los términos~\footnote{Puede utilizarse información
+sobre la polaridad del término o el papel gramatical que ocupa~(adjetivo, sustantivo, verbo)}.
+
+El proyecto resultante de este trabajo está concebido
+como parte de un proyecto general que se está desarrollando en el
+grupo de investigación. Es por tanto necesario integrar
+de forma efectiva la metodología propuesta en el
+entorno de análisis de información sobre
+\emph{Twitter} que se encuentra en desarrollo.
+\end{recomendations}

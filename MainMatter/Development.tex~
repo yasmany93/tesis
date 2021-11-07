@@ -1,0 +1,656 @@
+\chapter{Propuesta de Metodología}
+\label{chap:desarrollo}
+
+%Puedo hablar de la importancia de que exista una metodología
+Es importante contar con una metodología para el proceso de
+minería de opinión sobre redes sociales, ya que propone de
+forma general los pasos que deben realizarse. 
+Formula una secuencia de pasos lógicos y permite centrar
+investigaciones futuras en la mejora de cada etapa o fase
+de la metodología.
+
+% De esta forma se guía 
+% la tarea del investigador y le permite concentrarse en la 
+% parte del proceso donde realizará el aporte. Además le brinda 
+% ideas sobre el resto de las etapas que de no tenerse en cuenta,
+% influyen en los resultados.
+
+\section{Diseño General}
+
+El problema abordado en esta investigación 
+cuenta con varias propuestas de solución usualmente centradas en aplicar un método 
+de clasificación particular.
+Este trabajo propone una metodología a seguir para el proceso de minería 
+de opinión sobre la red social \emph{Twitter}, a partir de la experimentación 
+con diferentes métodos. La propuesta diseñada se divide en tres etapas fundamentales:
+
+\begin{enumerate}
+ \item Preprocesamiento o normalización de los datos.
+ \item Reducción de dimensiones:
+    \begin{itemize}
+     \item Descomposición.
+     \item Agrupamiento de los términos.                                                       
+    \end{itemize}
+ \item Clasificación supervisada.
+\end{enumerate}
+
+Como se puede observar en la figura~\ref{clas}
+cada etapa es independiente del resto. Dentro de una etapa pueden ser utilizados diferentes
+algoritmos, según las características 
+del problema.
+
+		\begin{figure}
+		\begin{center}
+		\includegraphics[width= 0.8\columnwidth]{Graphics/DiagramaSuilan}
+		\caption{Propuesta de metodología para el proceso de minería de opinión.}
+		\label{clas}
+		\end{center}
+		\end{figure}
+		
+Primero se realiza el preprocesamiento y se representan los mensajes como 
+vectores con dimensión la cantidad de palabras conocidas.
+%TODO
+Por lo tanto se obtienen datos muy esparcidos con enormes dimensiones. 
+
+%TODO Pasar a la explicación de la etapa
+%Ya que la dimensión
+%puede llegar a más de 2000 y el $90\%$ e los mensajes no contienen
+%más de 20 palabras.
+
+Esto hace necesaria la segunda etapa, donde se reducen las dimensiones del problema.
+Se proponen dos tipos de métodos diferentes, los métodos de descomposición y 
+métodos de \emph{clustering} sobre los términos.
+
+Luego se realiza la etapa de clasificación con dos clasificadores en serie.
+El primero clasifica en objetivo o subjetivo. El segundo obtiene los mensajes
+subjetivos del primer clasificador para clasificarlos en positivos,
+negativos o neutros.
+
+\section{Normalización de los Datos}
+\label{chap:prep}
+
+Un \emph{tweet} es un mensaje de 140 caracteres donde es común encontrar gran uso de abreviaturas y jerga
+de la web . Por lo general, en estos mensajes se utiliza gran diversidad de emoticones 
+para expresar opiniones y se deforma el
+lenguaje, ya que la ortografía y la gramática del idioma no son muy relevantes en ellos, como se puede
+observar en la figura~\ref{mensajes}.  
+
+		\begin{figure}
+		\begin{center}
+		\includegraphics[width= 0.48\columnwidth]{Graphics/t1}
+		\includegraphics[width= 0.48\columnwidth]{Graphics/t2}
+		\includegraphics[width= 0.48\columnwidth]{Graphics/t3}
+		%\includegraphics[width= 0.5\columnwidth]{Graphics/t4}
+		\includegraphics[width= 0.48\columnwidth]{Graphics/t5}
+		%\includegraphics[width= 0.5\columnwidth]{Graphics/t6}
+		\includegraphics[width= 0.48\columnwidth]{Graphics/t7}
+		\caption{Ejemplos de mensajes de \emph{Twitter}.}
+		\label{mensajes}
+		\end{center}
+		\end{figure}
+
+En la web los mensajes no están sujetos a las estrictas reglas 
+sintácticas del lenguaje~\cite{Merlo2010}, lo que dificulta la
+aplicación de algoritmos de minería de opinión sobre ellos. 
+Por tanto, se propone un proceso de conversión
+de los \emph{tweets} al lenguaje natural.
+
+El modelo de preprocesamiento propuesto se divide en 7 fases independientes:
+      
+      \begin{itemize}
+       \item Eliminar las etiquetas de \emph{Twitter}~(\emph{hashtag}) y URLs.
+       \item Separar los emoticones del texto.
+       \item Traducir la jerga.
+       \item Suprimir las letras repetidas.
+       \item Eliminar las \emph{stop words}.
+       \item Aplicar corrección ortográfica.
+       \item Hacer \emph{stemming}.
+      \end{itemize}
+
+Parte del preprocesamiento consiste en convertir todo el texto 
+a minúsculas. Esto hace que palabras como ``Hola'' y ``hola''
+se consideren equivalentes. Realizar este proceso y eliminar los 
+caracteres no alfanuméricos, se considera un preprocesamiento Simple.
+
+Determinar el idioma del \emph{Tweet} permite cargar los diccionarios de
+archivos de texto según el idioma determinado. En una primera etapa solo se considerarán
+mensajes en español y posteriormente en inglés. También se carga por defecto el diccionario de emoticones
+que no depende del idioma del texto. Los diccionarios están almacenados en archivos de texto~(de la forma
+jerga/emoticon : significado):
+
+\begin{verbatim}
+
+CU2MORO : ”See you tomorrow”
+
+Googlear : Buscar en Google
+
+:-] : positivo
+
+’] :’ : negativo
+\end{verbatim}
+
+Inicialmente se entenderá por palabra el resultado de dividir el \emph{Tweet} por espacios. Luego cada
+palabra se convierte a minúsculas y se verifica contra el diccionario de jerga. Si no se considera
+jerga, la palabra se divide en los grupos continuos de puntuación y de caracteres alfabéticos.
+Estos últimos continúan siendo procesados como palabras nuevas.
+Las nuevas palabras se vuelven a comparar con jerga y se les suprimen los caracteres repetidos hasta
+dos ocurrencias para luego verificar la palabra correcta mediante los algoritmos de corrección ortográfica.
+
+\subsection{Eliminar las etiquetas de Twitter y URLs}
+
+Es muy
+usual que los mensajes porten etiquetas y marcas propias de \emph{Twitter} como las de usuario, 
+tópicos o \emph{retweet}~(utilizado
+para indicar que algún usuario replicó el mensaje) y que hagan referencia a diferentes sitios de la web.
+Ejemplos de estas etiquetas se pueden ver en la figura~\ref{mensajes}
+
+
+% \begin{verbatim}
+% bloggerscuba >Ya vieron el artículo de Global Voices? http://bit.ly/7uPumv
+% 
+% yudivian jajaja :D
+% 
+% RT yudivian: Vas a estar pa record roger213tm dos #nutella 
+% in one week &lt;- Por lo menos tremendo average :P
+% 
+% RT MaiteLpez: caroboris NUnca estare en el grupo de industriale 
+% sen Facebook ni en ningun lugar #VillaClara campeon &lt;- #EPD
+% 
+% RT: oxigeno: roger213tm por las #torticas!! &lt;- SSSSSufre... ajaja
+% 
+% nos perdimos de aki jijiji
+% 
+% &lt;(o-o)&gt;
+% \end{verbatim}
+
+El procesamiento de esta fase sobre un \emph{tweet} consiste en eliminar 
+las etiquetas de \emph{Twitter} y las URLs mediante un autómata
+finito determinista que detecta todos los caracteres detrás de un $\sharp$~\footnote{Símbolo
+utilizado para indicar el uso de una etiqueta de tópico~(\emph{hashtag}).}, una @~\footnote{Símbolo
+utilizado para indicar el uso de una etiqueta de usuario} o que se reconozcan como
+la dirección de un sitio. También se elimina la etiqueta ”RT”,
+usualmente utilizada para indicar un \emph{retweet}, si se encuentra en cualquiera de sus
+formas~(rt, Rt, rT) y si está rodeada de espacios ya que de lo contrario se pueden eliminar partes de
+palabras correctas.
+
+En \emph{Twitter} es relativamente común la utilización de referencias a otros sitios de la web con frecuencia
+\emph{blogs}, noticias o reseñas. La dirección de estos sitios, generalmente acortada usando un servicio específico
+para ese fin, aparece en el propio mensaje. El problema surge cuando en la URL se encuentran palabras
+que pueden influir sobre el clasificador de forma no deseada. Por esto es necesario eliminarlas ya que
+forman parte del texto del mensaje.
+
+En un \emph{tweet} se hace referencia también a
+otros usuarios, un tópico en especial o a otros mensajes mediante el uso de marcas
+que aparecen en el texto. Estas referencias pueden influir, al igual que las URL, sobre los
+clasificadores por lo tanto también deben ser eliminadas.
+Al finalizar esta fase se considera que el \emph{tweet} se encuentra en lenguaje natural y se
+respetan los signos de puntuación que serán utilizados en análisis posteriores.
+
+\subsection{Separar los emoticones del texto}
+
+Es frecuente la utilización de emoticones o \emph{smileys} para darle expresividad a 
+los \emph{tweets}, dado que internet es un medio frío y a menudo se desean 
+expresar opiniones positivas o negativas, como puede verse en la figura~\ref{mensajes}. 
+A los emoticones se les da usos más complejos de detectar como es la ironía, de ahí que sean muy
+importantes para hacer análisis de sentimientos. Como parte de este trabajo se creó
+un diccionario de 520 emoticones y las frases que definen su semántica lo más breve posible.
+
+Para identificar los emoticones se propone el uso de expresiones regulares y el diccionario de emoticones
+para crearlas. Estos son eliminados del texto para que no se confundan con la jerga o signos de
+puntuación y evitar que cambien de sentido debido a otras transformaciones.
+Para analizar el texto es necesario encontrar una unidad básica~(en nuestro caso utilizamos las palabras). 
+%--------------------------
+
+\subsection{Traducir la jerga}
+
+Una diferencia entre un \emph{tweet} y un texto en lenguaje natural radica en 
+el uso indiscriminado de abreviaturas y jerga utilizada en la web debido a la restricción en la longitud de
+140 caracteres, puede verse la figura~\ref{mensajes}. La jerga también 
+llamada \emph{netspeak}~\footnote{Uso informal de palabras y 
+expresiones que no están
+consideradas en el idioma o dialecto del hablante.} puede ofrecer como resultado más de una abreviatura para
+una única palabra. Lo que provoca en la clasificación que el peso de la palabra quede repartido entre las
+variaciones de la misma o que en la clasificación una de las variaciones obtenga un peso mínimo aunque la
+palabra esté entre los términos determinantes a la hora de clasificar. Por tanto es evidente la necesidad de
+traducir la jerga a un lenguaje más convencional, para esto se propone el uso de diccionarios en diferentes
+idiomas~(español e inglés) de la forma: jerga--idioma que se consultará para la conversión.
+%--------------------------------
+
+\subsection{Suprimir las letras repetidas}
+
+Una deformación común en internet es la modificación de la sintaxis de las palabras repitiendo
+caracteres dentro de la misma con el objetivo de enfatizarla~(Ejemplo: "hooooooola"). Generalmente
+la mayor o menor presencia de este efecto está muy ligado al tipo de contenido con que se trabaja y
+al estilo propio del autor. En las páginas de noticias escritas por periodistas normalmente
+hay un mayor control de la ortografía mientras que las páginas de reseñas o en los \emph{blogs}. Este fenómeno
+es mucho más frecuente en \emph{Twitter} donde su presencia se acentúa todavía más ya que en este lenguaje no
+es relevante la ortografía. 
+
+Para un análisis posterior del texto es necesario suprimir las letras repetidas,
+pero existen palabras correctas con más de un carácter igual consecutivo~(Ejemplo: \emph{good}, acción). Por
+lo tanto se propone suprimir los caracteres repetidos hasta dos ocurrencias. Otro problema consiste en
+que no todas las palabras con dos caracteres repetidos son transformadas y pueden haber sido escritas
+incorrectamente por lo que llegado a este punto se utiliza un corrector ortográfico que determina las
+palabras correctas. Si el corrector da más de una forma correcta para la misma palabra ésta se dejará como
+está en el texto, al igual que si no se encuentra ninguna forma correcta, y se continúa con el proceso de
+análisis.
+
+%--------------------------------
+
+\subsection{Stop Words}
+
+Las \emph{stop words} son palabras que no aportan contenido al mensaje y 
+deben ser eliminadas una vez que sean encontradas en el texto.
+Para esto se trabaja sobre un listado de palabras propuestas en diferentes sitios de internet 
+como las \emph{stop words} más utilizadas, varias de estas palabras pueden aportar 
+semántica a la opinión que se da en el mensaje. Por lo tanto, 
+se propone conservar las siguientes
+palabras aunque son consideradas \emph{stop words}:
+
+\begin{center}
+\begin{tabular}{c c c}
+  no & muy & ni \\
+  si & contra & algunos \\
+  pero & tanto & algunas \\
+  más & mucho & poco \\ 
+  como & nada & algo \\ 
+  tanto & muchos & entonces \\
+  cierto & bajo & verdad \\
+  ciertos & arriba & verdadero \\
+  ciertas & encima & verdadera \\
+  cierta & valor & modo \\
+  bien & mientras & \\
+\end{tabular} 
+\end{center}
+
+\subsection{Aplicar corrección ortográfica}
+
+La corrección ortográfica se aplica a un término en específico en cada
+instante de tiempo. Calcula la distancia de Levenshtein~\cite{Levenshtein} del término
+analizado a las palabras que contiene un diccionario del idioma determinado.
+Como este proceso se realiza de forma automática, es muy difícil determinar,
+entre varios términos ``parecidos'' cuál es el más indicado. 
+
+En la red se utilizan gran cantidad de términos, o adaptaciones de los mismos 
+que no se encuentran en el diccionario. Por lo tanto los algoritmos tienden
+a corregir todos los errores ortográficos y a cambiar un gran número de palabras,
+que a veces modifican el sentido del texto.
+
+\subsection{Stemming}
+El \emph{stemming} permite que palabras de la misma familia~(perro, perrito, perrazo)
+se consideren como una misma palabra. Esto permite reconocer conceptos
+que transmiten el significado y por lo tanto aportan lo mismo en la opinión.
+
+Para el \emph{stemming} se propone una variante del algoritmo de Porter~\cite{Por80} para Español de la 
+librería \texttt{nltk}. Se sugieren varios cambios al algoritmo original:
+\begin{itemize}
+ \item Considerar los sufijos: ito, ita, azo, aza, itos, itas, azos, azas,
+ de los diminutivos y aumentativos.serán eliminadas
+ \item Se agrega la regla de que estos sufijos solo se podrán eliminar si lo que queda de la palabra es
+ mayor o igual a tres caracteres. En caso contrario 
+ es probable que no se esté analizando un sufijo sino el final de una palabra.
+ \item Se agrega la regla de que estos sufijos solo se podrán eliminar si al adicionar la 
+ última letra del sufijo al resto de la palabra, esta tiene sentido~(aparece en los diccionarios).
+\end{itemize}
+
+Ejemplo:
+
+perr\emph{ito} 
+perro (aparece en el diccionario)
+--------------
+perr
+
+suscr\emph{ito}
+suscro (no aparece en el diccionario)
+------------
+suscrit
+
+
+\section{Reducción de dimensiones}
+%importancia de la reducción de dimensiones
+%influencia sobre los clasificadores
+La dimensión de los datos afecta el funcionamiento de varios 
+clasificadores~\cite{Mach}. Las redes neuronales, por ejemplo, no 
+pueden diseñarse con entradas de grandes dimensiones 
+a menos que se cuente con conjuntos de entrenamiento
+muy grandes.
+Por lo tanto se propone la utilización de algoritmos
+para el proceso de reducción de dimensiones.
+
+Se formulan dos acercamientos fundamentales: algoritmos de
+descomposición de matrices, desechando las componentes menos importantes
+y algoritmos de \emph{clustering} sobre el espacio de las palabras,
+que agrupan los términos semejantes. 
+
+\subsection{Descomposición}
+
+ En la representación matricial de los datos, donde los documentos 
+están representados como vectores de términos, se expresa los documentos 
+en la base canónica de los términos. Este espacio tiene una enorme dimensión y dado 
+que los documentos utilizados tienen solo 140 caracteres, está muy esparcido.
+Por lo tanto se pueden aplicar métodos de descomposición de matrices donde
+se representa la matriz de características en un subespacio del espacio de los 
+términos, de menor dimensión, donde se conservan las regiones más importantes del mismo.
+
+Para reducir la dimensión se proponen varios algoritmos que utilizan diferentes
+criterios para identificar las componentes menos importantes en la 
+matriz de características. Según la dimensión deseada, se eliminan las 
+$k$ componentes menos representativas. Algunos de los algoritmos propuestos
+por la herramienta \texttt{sklearn}~\cite{scikit-learn} 
+se mencionan a continuación:
+
+%\item[Linear Discriminant Analysis~(LDA):] modela la distribución condicional 
+% 	de los datos, $P(X|y=k)$, para cada clase k. La predicción puede obtenerse 
+% 	utilizando la regla de Bayes:
+% 	
+% 	$$P(y | X) = P(X | y) \cdot P(y) / P(X) = P(X | y) \cdot P(Y) / ( \sum_{y'} P(X | y') \cdot p(y'))$$
+% 	
+% 	La P(X|y) es modelada como una distribución Gausiana, asumiendo la misma covarianza 
+% 	de la matriz para cada clase.
+	
+      \begin{description}
+	\item[Linear Discriminant Analysis~(LDA):] permite la reducción de dimensiones
+		supervisada, mediante la proyección de la entrada en un subespacio
+		compuesto por las direcciones más discriminantes. El criterio de 
+		selección de dimensiones se basa en la estimación de la probabilidad
+		$P(X|y)$ de observar la entrada $X$ en la clase $y$, donde $X$
+		es un vector de características (términos). Estas
+		probabilidades se modelan como distribuciones gaussianas con
+		matrices de covarianza idénticas. %TODO: terminar, citar
+		
+	\item[Principal Component Analysis~(PCA):] proyecta los documentos
+		en el subespacio generado por los $k$ valores
+		propios más significativos de la descomposición SVD de la
+		matriz de características. %TODO: terminar, citar
+			
+	\item[Randomized PCA:] basado en PCA, pero empleando una descomposición
+		SVD estocástica (aproximada), más eficiente en matrices muy esparcidas.
+		%TODO: terminar, citar
+		
+	\item[Sparse PCA:] encuentra las componentes esparcidas que permiten
+		reconstruir la matriz de características original de manera
+		óptima. A diferencia de LDA, no garantiza ortogonalidad en 
+		la base del subespacio generado. %TODO: terminar, citar
+	
+	\item[Independent Component Analysis~(ICA):] encuentra las componentes
+		que maximizan la cantidad de información independiente. A diferencia
+		de los métodos de componentes principales, 
+		que maximizan la varianza explicada por
+		el subespacio generado, ICA permite reconstruir distribuciones
+		no gaussianas. %TODO: terminar, citar
+      \end{description}     
+  
+  \subsection{Agrupamiento de los términos}
+  
+  La reducción de dimensiones también puede lograrse mediante 
+  algoritmos de \emph{clustering} que agrupen los términos en 
+  diferentes conjuntos. Expresar los documentos en este nuevo
+  espacio, reduce las dimensiones del problema.
+  
+  El proceso de agrupamiento no se realiza directamente 
+  sobre los mensajes, sino sobre los términos que aparecen
+  en los mismos. Por lo tanto es necesario transponer la
+  matriz de características antes de realizar el proceso
+  de \emph{clustering}. Luego se determinan los grupos de 
+  términos que serán las nuevas componentes de los mensajes.
+  Se transpone nuevamente la matriz obtenida a partir de 
+  expresar cada mensaje en el espacio definido por los
+  \emph{clusters} y se pasa a la etapa de clasificación.
+  
+  Para expresar un mensaje en el espacio de los \emph{clusters}
+  se crea un nuevo documento, con dimensión la cantidad de 
+  grupos de palabras obtenidos. Cada palabra del mensaje original
+  incrementa el valor del nuevo mensaje en la componente correspondiente
+  al grupo a donde ella pertenece.
+  
+  En esta etapa no se debe limitar el conjunto de entrenamiento a
+  al corpus de mensajes clasificados. Deben utilizarse todos los
+  mensajes disponibles, ya que los algoritmos de aprendizaje no
+  supervisado no utilizan una evaluación de los mensajes. Crean su propia 
+  organización en grupos a partir de las características de los datos.
+  
+  		\begin{figure}
+		\begin{center}
+		\includegraphics[width= 1 \columnwidth]{Graphics/Clustering}
+		\caption{Esquema del funcionamiento de los \emph{clusters}.}
+		\label{clas}
+		\end{center}
+		\end{figure}
+  
+  Los algoritmos de \emph{clustering} propuestos son:
+  
+      \begin{description}
+	\item[Growing Neural Gas~(GNG):] es un algoritmo de agrupamiento basado
+		en distancias que intenta solventar la restricción de algoritmos
+		como K-means de predefinir la topología de los grupos. Presenta dos
+		grandes ventajas: detecta de forma automática la cantidad de grupos,
+		y los grupos pueden tener cualquier topología.
+		
+		La idea fundamental de GNG consiste en construir una estructura
+		de grafo, donde cada componente conexa representa un grupo, que
+		se vaya adaptando a la topología de los datos de entrada. Los
+		nodos de este grafo son puntos en el mismo espacio de los vectores
+		de entrada. Las conexiones entre los nodos se crean y se destruyen
+		a medida que se observan nuevos puntos, según un criterio de edad.
+		
+	\item[Dbscan:] el algoritmo DBSCAN (\emph{Density-Based Spatial Clustering of Applications with Noise})
+		pertenece a la familia de los llamados algoritmos basados en densidad. A diferencia
+		de los algoritmos basados en distancia, estos consideran la formación de grupos a partir
+		de la concentración de puntos en una vecindad $\epsilon$. DBSCAN permite detectar
+		de forma automática la cantidad de grupos, y se adapta a la topología de los datos.
+		
+		El concepto fundamental de DBSCAN es el de punto núcleo. Un punto $x$ es núcleo si
+		en su $\epsilon$-vecindad contiene mas de $N$ puntos. A partir de este concepto
+		se define la relación de densamente alcanzable, que permite determinar los puntos
+		que pertenecen al grupo de $x$. Los puntos densamente alcanzables desde $x$ son aquellos
+		puntos en la $\epsilon$-vecindad de $x$, o los puntos densamente alcanzables desde
+		los puntos núcleos en la $\epsilon$-vecindad de $x$. El algoritmo funciona como
+		una búsqueda en profundidad a partir del grafo dirigido que se forma con la 
+		relación densamente alcanzable, detectando las componentes conexas en este grafo.
+	\item[Ward:] es un algoritmo de \emph{clustering} jerárquico aglomerativo
+		(\emph{bottom-up}) que mezcla los \emph{clusters} minimizando una métrica
+		similar a Kmeans. Es mucho más eficiente que Kmeans para un 
+		número elevado de \emph{clusters}. 
+        \item[Kmeans:] el algoritmo K-means (K-medias) construye una solución 
+		aproximada al problema de minimización de distancia inter-grupo,
+		escogiendo $k$ centroides de forma que cada elemento se asigne
+		al grupo relacionado al centroide más cercano, y los centroides
+		estén tan alejados entre sí como sea posible. El algoritmo
+		sigue una estrategia de \emph{Hill Climbing}, escogiendo en 
+		cada iteración la selección de centroides que minimiza la
+		distancia inter-grupo (la media entre todos los elementos del grupo)
+		y reacomodando los elementos al grupo más cercano.
+        \item[Affinity Propagation:] determina los \emph{clusters} 
+		mediante el envío de mensajes entre pares de ejemplos
+		hasta converger. De esta forma un conjunto de datos es descrito
+		empleando un número pequeño de ejemplos, que son identificados como los más
+		representativos del resto de los ejemplos. Los mensajes transmitidos entre los
+		pares de ejemplos representan la capacidad de que un ejemplo represente al otro.
+		Esta medida es actualizada de forma iterativa en respuesta a los valores
+		computados para el resto de los ejemplos.
+        \item[Mean Shift:] determina los \emph{clusters} mediante la estimación
+        de parches en una matriz de puntos de densidad suave. Este
+        algoritmo calcula la cantidad de \emph{clusters} necesarios de forma
+        automática.
+        \item[Spectral Clustering:] realiza una inmersión en una dimensión
+        menor de la matriz de similaridad entre ejemplos, seguida de la
+        ejecución de Kmeans en los vectores de baja dimensión.
+      \end{description}
+
+\section{Clasificación}
+La clasificación de los mensajes se divide en dos etapas:
+	
+	\begin{itemize}
+	\item Determinar si el mensaje es objetivo o subjetivo.
+	\item Clasificar los mensajes subjetivos en positivos, negativos o neutros.
+	\end{itemize}
+	
+	%TODO Para ambas etapas pueden utilizarse los mismos clasificadores.
+
+	El aprendizaje supervisado parece una alternativa natural para enfrentar este
+	problema, ya que se desea asignar a cada mensaje una clasificación única.
+	El conjunto de entrenamiento se construye a partir de la clasificación
+	manual por parte de especialistas~(en este caso los autores) de una lista
+	de \emph{tweets} extraídos del sitio de \emph{Twitter} empleando herramientas
+	desarrolladas en la facultad para este propósito. Es necesario notar que 
+	incluso la tarea de clasificación manual es difícil, debido a la ambigüedad
+	inherente a estos mensajes. Por este motivo se ha escogido~(intentado confeccionar
+	un conjunto de entrenamiento seleccionando) los mensajes que para un humano
+	tienen una orientación bien definida, obviando los mensajes donde los clasificadores
+	humanos estuvieron en desacuerdo.
+	
+	Los clasificadores empleados reciben un conjunto de entrenamiento en 
+	la etapa de aprendizaje, que en este caso se obtiene a partir de un archivo de
+	texto con una entrada por línea de la forma
+	\verb|MENSAJE ====> CLASE|, donde la clase asignada es \verb|OBJETIVO|,
+	\verb|NEGATIVO| o \verb|POSITIVO|. La mayor parte de los algoritmos
+	pueden encontrarse en la herramienta \texttt{sklearn}~\cite{scikit-learn}. 
+	
+	Los clasificadores propuestos son:
+	\begin{description}
+	  \item[Dummy (stratified):] clasifica aleatoriamente, teniendo en 
+	  cuenta el porciento de elementos que corresponden a cada clase.
+	  \item[Dummy (uniform):] clasifica aleatoriamente utilizando una distribución
+		uniforme.
+	  \item[Neural Network (linear):] red neuronal de una sola capa, que solo permite
+	  aproximar funciones lineales.
+	  \item[Neural Network (1 layer):] una red neuronal acíclica con 
+		    una o más capas ocultas se conoce como un perceptrón multicapa.
+		    Añadir capas intermedias al perceptrón permite aumentar
+		    el espacio de hipótesis que es posible representar en la red,
+		    y lo más notable, eliminar la necesidad de separabilidad lineal.
+		    Una capa oculta suficiente grande es suficiente para
+		    representar todas las funciones continuas con precisión
+		    arbitraria, y dos capas bastan para representar incluso funciones
+		    discontinuas. Sin embargo, el problema de caracterizar
+		    para una arquitectura de red específica cuáles funciones
+		    puede o no representar es complejo. La implementación utilizada contiene
+		    una capa oculta con 10 neuronas.
+	  
+	  \item[LogisticRegression:] también conocido en la literatura como clasificador de 
+	  máxima entropía. Está basado en un modelo lineal que minimiza el costo de ``hit or miss'' 
+	  de la función, en vez de la suma de las raíces de sus residuales, como una regresión
+	  ordinaria. 
+	  
+	  \item[Lasso:] consiste en un modelo lineal que estima coeficientes esparcidos.
+	  	Muestra una tendencia a encontrar soluciones con una cantidad de parámetros
+	  	reducida, disminuyendo la cantidad de variables de las que depende la
+	  	hipótesis de clasificación.
+	  	
+	  \item[Rocchio:] el clasificador de \emph{Rocchio} se basa en aplicar el algoritmo de clasificación
+		\emph{k-nearest-neighboors}~(KNN) utilizando como indicadores los centroides obtenidos
+		del algoritmo \emph{$k$-means} u otro método de agrupamiento, etiquetados según
+		la clase mayoritaria de cada grupo, o por algún tipo de voto ponderado \cite{Manning2008}.
+	  
+	  \item[Ridge Classifier:] el clasificador se basa en un modelo lineal. Utiliza
+	  la regresión de Ridge sobre el problema de mínimos cuadrados, imponiendo
+	  una penalización al tamaño de los coeficientes. Los coeficientes de Ridge
+	  minimizan una penalización residual a la suma de raíces:
+	  
+	  $$ \min_w {{|| X w - y||_2}^2 + \alpha {||w||_2}^2} $$
+	  
+	  \item[Perceptron:] red neuronal para funciones lineales, 
+		sin capas ocultas, de la herramienta \texttt{sklearn}. 
+	  
+	  \item[Passive-Aggressive:] es familia de los algoritmos de aprendizaje a 
+	  gran escala. Similar al Perceptron ya que no requiere un factor de aprendizaje, 
+	  pero incluye la regularización de un parámetro.
+	  
+	  \item[Stochastic Gradient Descent~(SGDC model):] es un modelo lineal 
+	  muy simple y eficiente. Particularmente utilizado con grandes conjuntos
+	  de características.
+	  
+	  
+	  \item[Nearest Neighbors~(KNN):] el funcionamiento del algoritmo KNN 
+		radica en asignar la clase a un nuevo ejemplo
+		basado en las observaciones de las clases de sus vecinos más cercanos. Es necesario
+		contar con una representación de los datos en un espacio métrico y con una
+		definición de distancia que aproxime de cierta forma la topología del espacio
+		original. Para la recuperación de información sobre lenguaje natural es común 
+		representar los documentos~(en este caso mensajes) como vectores de pesos sobre
+		los términos que contienen.
+	  
+	  \item[Linear SVM:] las máquinas de soporte vectorial construyen 
+	  	una hipótesis mediante el cálculo de un hiperplano
+	  	que separe a los elementos de cada clase. El problema de optimización asociado
+	  	consiste en encontrar el hiperplano separador que maximiza la mínima de las distancias
+	  	a cada uno de los elementos. En espacios muy esparcidos es bastante
+	  	probable encontrar un hiperplano separador, o al menos minimice de forma
+	  	considerable los elementos en la clase incorrecta.
+	  	
+	  \item[RBF SVM:] adiciona una función de \emph{kernel} no lineal a las máquinas
+	  	de soporte vectorial que proyecta los vectores a clasificar en un espacio
+	  	de dimensión mayor. En este espacio los vectores se encuentran más esparcidos,
+	  	por lo que se aumenta la probabilidad de encontrar un separador lineal. La
+	  	proyección del separador lineal en el espacio original consiste en un separador
+	  	no lineal cuya forma depende del \emph{kernel} escogido. De esta forma
+	  	es posible clasificar en espacios no separables linealmente. 
+	  
+	  \item[Decision Tree:] los árboles de decisión son clasificadores que 
+		aproximan una función de clasificación
+		a partir de la ejecución de un conjunto de pruebas sobre los valores asociados
+		a atributos que se pueden extraer del elemento a clasificar~\cite{russell1996}.
+		Se implementó el algoritmo de aprendizaje ID3 para la construcción de árboles de decisión.
+		Este algoritmo genera de forma iterativa un árbol de decisión, eligiendo
+		en cada nodo el atributo que maximiza la cantidad de información obtenida
+		sobre el conjunto de entrenamiento. Formalmente, se escoge el atributo $A$ que
+		maximice la ganancia de información sobre el conjunto de entrenamiento $E$:
+		
+		$$
+		G(E,A) = H(E) - \sum_{V_i \in A} \frac{|E_i|}{|E|} \cdot H(E_i)
+		$$
+		donde $E_i$ es el subconjunto de ejemplos donde le atributo $A$ toma
+		el valor $v_i$.
+		
+		La medida $H(E)$ es la entropía del conjunto $E$, que se calcula en función
+		de la probabilidad de observar en $E$ cada posible clase $C_i$:
+		
+		$$
+		H(E) = - \sum_i p_i \cdot \log_2(p_i) = - \sum_i \frac{|E_i|}{|E|} \cdot \log_2{\frac{|E_i|}{|E|}}
+		$$
+		donde $E_i$ es el subconjunto de ejemplos clasificados en la clase $C_i$. 
+	  
+	  \item[Random Forest:] consiste en un conjunto \emph{ensemble} de árboles
+		de decisión. Cada árbol se construye de un ejemplo extraído
+		con reemplazo del conjunto de entrenamiento. Al dividir un nodo,
+		el corte realizado se escoge de forma óptima en un subconjunto
+		aleatorio de las características. Como resultado generalmente
+		aumenta ligeramente el sesgo del clasificador, disminuyendo
+		en cambio la varianza. A menudo la disminución de la varianza
+		compensa el aumento del sesgo, resultando en un clasificador
+		más preciso.
+	  
+	  \item[Naive Bayes:] el clasificador \emph{Naive Bayes} es un clasificador bayesiano
+		simple que asume independencia entre las características\cite{Mitchell1997MachineLearning}.
+		La fase de entrenamiento consiste en computar para cada
+		característica la cantidad de veces que es observada en cada clase,
+		y de esta forma aproximar la probabilidad de que dicha característica
+		indique la clase correspondiente.
+	  
+	  \item[LDA:] modela la distribución condicional 
+	      de los datos, $P(X|y=k)$, para cada clase k. La predicción puede obtenerse 
+	      utilizando la regla de Bayes:
+	      
+	      $$P(y | X) = P(X | y) \cdot P(y) / P(X) = P(X | y) \cdot P(Y) / ( \sum_{y'} P(X | y') \cdot p(y'))$$
+	      
+	      La P(X|y) es modelada como una distribución Gausiana, asumiendo la misma 
+	      matriz de covarianza para cada clase.
+	  
+	  \item[QDA:] como en LDA pero no se asume ninguna restricción sobre las 
+		matrices de covarianza. Lo que conlleva a una superficie de 
+		decisión cuadrática.
+	\end{description}
+	
+	Finalmente se crea una propuesta donde es válido teóricamente
+	utilizar cualquiera de los métodos mencionados. Hasta no realizar un proceso de 
+	experimentación no se puede concebir una propuesta específica que ofrezca
+	los mejores resultados entre las variantes analizadas.
+	
+		\begin{figure}
+		\begin{center}
+		\includegraphics[width= 0.8\columnwidth]{Graphics/diagrama}
+		\caption{Esquema general de la metodología.}
+		\label{clas}
+		\end{center}
+		\end{figure}
+ 

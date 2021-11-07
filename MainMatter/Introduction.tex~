@@ -1,0 +1,273 @@
+\begin{introduction}
+
+Internet es una plataforma para el intercambio de datos
+cada vez más utilizada donde los usuarios, entre otras
+acciones, comparten e intercambian opiniones. Con el tiempo, el número 
+de usuarios, así como el volumen de información existente, se ha incrementado
+considerablemente dificultando el análisis de la
+misma. La facilidad del acceso a Internet y la evolución 
+de la dinámica de creación de contenidos provoca que la utilicen
+cada vez más personas para expresar sus ideas.
+
+La Web, el espacio más visible de Internet, evolucionó de una plataforma fundamentalmente informativa
+donde los usuarios consumen la información generada por los suministradores~(instituciones,
+agencias de noticias, etc.) a un entorno colaborativo donde los propios usuarios producen
+y comparten la información. Este modelo colaborativo es conocido como la Web 2.0. 
+Este modo de interactuar ha crecido aceleradamente en los
+últimos años debido a la cantidad de información producida. Cualquier individuo con acceso
+a la red es un potencial generador de información, muchas veces en forma de opinión.
+Debido a la libertad y velocidad con que se genera, además del hecho
+de que procede de fuentes informales~(páginas personales, \emph{blogs}),
+generalmente, la información presente en la web carece de estructura
+y es propensa a errores sintácticos.
+
+Una de las expresiones características de la web 2.0 son las redes
+sociales, donde los usuarios 
+se comunican a través de la web. En estos espacios de comunicación los
+usuarios expresan sus experiencias u opiniones
+personales sobre diversos temas, siendo ellos mismos
+los generadores de contenido y gestores de la información~\cite{Bollen}.
+Dentro de las redes sociales, el \emph{microblogging} ha tenido un espacio 
+preponderante propulsado por el auge de los dispositivos y la  
+conectividad móvil.
+Esta forma de comunicación es más sencilla de
+producir, distribuir y consumir. El \emph{microblogging} se basa en la
+difusión o publicación de textos breves~(usualmente sobre los 140 caracteres) que
+pueden ser distribuidos, generados y consumidos desde
+dispositivos móviles, \emph{emails}, mensajería instantánea o directamente en la web. 
+Este fenómeno es muy utilizado por los
+usuarios para expresar una opinión, informar de una noticia o hacer referencia 
+a otros sitios de la web~\cite{Bollen}.
+
+Entre las redes de \emph{microblogging} más conocidas se encuentra \emph{Twitter}
+\footnote{\href{http://twitter.com}{http://twitter.com}} 
+que hace su aparición en
+el año 2006, creándose con él esta nueva forma de comunicación en Internet~\cite{Merlo2010}.
+El servicio ha tenido gran
+auge, pues a finales del año 2007 se escribieron 500.000 mensajes por trimestre, en el 2008
+eran 100 millones los mensajes escritos por trimestre, ya en 2009 se escribieron 2.000 millones de
+mensajes por trimestre y para los primeros tres meses del 2010 se habían 
+escrito 4.000 millones de mensajes~\cite{Merlo2010}.
+
+%TODO gráfica
+
+Desde su creación \emph{Twitter} se ha considerado una fuente de información para conocer la opinión de
+gran cantidad de personas sobre un tema o un producto~\cite{Bollen}. Dado el volumen de información 
+existente en este espacio no es posible
+realizar esta tarea sin la ayuda de sistemas computacionales que realicen el análisis de forma automática.
+Es por ello que se ha realizado un gran número de trabajos de minería de texto y minería de opinión
+sobre \emph{Twitter}~\cite{Bollen, Pang}, con el objetivo de extraer información global 
+de la red para valorar diversos temas.
+
+%TODO cambiar este párrafo
+Conocer la valencia de una opinión es un factor importante para realizar tareas
+con impacto social, económico o político tales como: el análisis de
+mercado para las empresas, calcular los índices de sa\-tis\-fac\-ción de un producto,
+estado de opinión de un país, entre otros. \emph{Twitter} es un entorno 
+propicio para realizar trabajos donde se deseen reconocer las opiniones de los usuarios. 
+
+\section*{Motivación}
+
+La minería de texto es una línea de investigación en la inteligencia 
+artificial. Se considera muy importante dado que gran cantidad de
+información, sobre todo en la web, se encuentra en texto.
+En el marco del grupo de Inteligencia Artificial de la 
+Universidad de la Habana se desarrolla el proyecto Medialab con
+el objetivo de establecer el espacio o marco de las investigaciones y desarrollos
+relacionados con recursos y redes sociales en entornos digitales.
+Este proyecto considera a \emph{Twitter} como un 
+espacio de investigación donde pueden realizarse grandes proyectos 
+de análisis de información. Uno de estos proyectos cuenta con una 
+tesis de análisis de influencia que se orquesta con los trabajos en 
+desarrollo de detección de idioma y detección de tópico. 
+Es la intención de este trabajo sobre minería de opinión contribuir a dicho
+proyecto.
+
+% Desde el punto de vista académico, la minería de opinión presenta desafíos
+% interesantes pues requiere de la aplicación de técnicas de diversas
+% áreas de la ciencia de la computación tales como procesamiento del
+% lenguaje natural, recuperación de información, reconocimiento de patrones y clasificación. El
+% gran volumen de datos no estructurados disponible en las redes sociales
+% exige el diseño de algoritmos eficientes para su procesamiento.
+% Brinda entonces un marco propicio para el desarrollo de investigaciones
+% con acceso a una cantidad de datos sin precedentes.
+
+\section*{Problema}
+
+Conocer la valencia de una opinión es un factor importante para realizar tareas
+con impacto social, económico o político tales como: el análisis de
+mercado para las empresas, calcular los índices de sa\-tis\-fac\-ción de un producto,
+estado de opinión de un país, entre otros.
+Un lugar ideal para recoger estas opiniones son las redes sociales, donde las personas 
+expresan su opinión espontáneamente. 
+\emph{Twitter}, como máximo exponente del \emph{microblogging} en Internet, se ha
+convertido en
+una manera eficiente de consultar noticias, mantenerse en contacto con los
+amigos, entre otras actividades cotidianas. Precisamente estos mensajes de
+texto que circulan por \emph{Twitter} constituyen elementos determinantes en el
+análisis de la opinión que circula en la red.
+El volumen de información almacenado en
+estas redes, debido a su popularidad, no es procesable por seres humanos.
+Y por tanto se requiere un proceso de automatización que simplifique la tarea. 
+
+%\section{Definición del problema}
+%  Se desea determinar de manera automática en un mensaje de texto de \emph{Twitter}, 
+%  \emph{Tweet}, si se expresa una opinión
+%  o no. En el caso de que se exprese una opinión reconocer si esta es positiva, negativa
+%  o neutra.
+
+%\section*{Definición de los datos}
+%\label{sec:data_definition}
+%  La entrada al problema está formada por un conjunto de mensajes procedentes de \emph{Twitter}.
+%  Estos mensajes están escritos de manera informal por lo que pueden presentar irregularidades
+%  en su escritura que dificultan la clasificación como: 
+%  \begin{itemize}
+%   \item Errores ortográficos.
+%   \item Letras repetidas.
+%   \item Utilización de jerga.
+%   \item Utilización de emoticones.
+%   \item Inadecuado uso de los signos de puntuación.
+%   \item Palabras en varios idiomas.
+%   \item Referencias a sitios, URLs.
+%   \item Marcas procedentes de \emph{Twitter}~(usuario,tema, otros).
+%  \end{itemize}
+
+\section*{Hipótesis y Objetivo}
+
+El objeto de investigación de esta tesis
+lo constituye la red social \emph{Twitter},
+estableciendo su campo de acción alrededor
+de la información
+producida por sus usuarios de esta red y las
+técnicas necesarias para identificar la misma
+como opiniones así como la valencia de las mismas.
+
+La hipótesis plantea que conociendo las características
+particulares de la información proveniente de \emph{Twitter}
+es posible realizar un procesamiento de la misma que,
+utilizando algoritmos de aprendizaje supervisado, 
+permita identificar de un conjunto de técnicas cuáles 
+se adaptan mejor a las características del problema. 
+  
+  \subsection*{Objetivo General}
+  
+  ``Proponer una metodología completa para el desarrollo del proceso
+minería de opinión sobre \emph{Twitter}''
+
+  \subsection*{Objetivos específicos}
+\begin{itemize}
+  \item Estudiar el estado del arte relacionado con el problema
+  y las investigaciones anteriores 
+  desarrolladas en el grupo de investigación.
+  \item Identificar las etapas fundamentales de un proceso de 
+  minería de opinión con el fin de adecuarlas al entorno específico
+  donde serán aplicadas.
+ \item Identificar los elementos suceptibles de ser preprocesados
+ y que puedan incidir en el proceso de minería de opinión.
+ \item Identificar un conjunto de algoritmos de aprendizaje apropiados
+ para detectar las opiniones y su valencia.
+ \item Crear un corpus de mensajes de \emph{Twitter} que permita realizar 
+ experimentos cuyos resultados arrojen indicios para conformar una metodología.
+\end{itemize}
+
+\section*{Propuesta de Solución y Contribuciones}
+% 
+% Se propone una herramienta para el análisis de opinión en \emph{Tweets} a
+% partir de la normalización del los mensajes. La herramienta realizará de forma 
+% automática el preprocesamiento del texto y la clasificación del mismo.
+% Ambos procesos son configurables por el usuario.
+% 
+% El preprocesamiento se realiza sobre los mensajes para obtener el texto en 
+% lenguaje natural, donde se hayan eliminado los elementos que producen ruido.
+% Los clasificadores generalmente se basan en el reconocimiento de estructuras
+% o patrones comunes en los mensajes que pertenecen a la misma clase. La existencia
+% de elementos de ruido~(palabras mal escritas, etiquetas, emoticones) 
+% perturba a los clasificadores, pues proveen de un contenido que no deseado al clasificar
+% y pueden hacer parecer diferentes a mensajes que se desea reconocer como semejantes.
+% 
+% % El modelo de preprocesamiento propuesto se divide en 7 etapas independientes
+% % que pueden activarse según los requerimientos del usuario:
+% %       
+% %       \begin{itemize}
+% %        \item Eliminar las etiquetas de \emph{Twitter}.
+% %        \item Separar los emoticones del texto.
+% %        \item Traducir la jerga.
+% %        \item Suprimir las letras repetidas.
+% %        \item Eliminar las \emph{stop words}.
+% %        \item Aplicar corrección ortográfica.
+% %        \item Hacer \emph{stemming}.
+% %       \end{itemize}
+% 
+% Una vez eliminados los elementos de ruido, el mensaje resultante es procesado
+% por dos clasificadores en serie. El primero de estos clasificadores determina
+% si el mensaje es subjetivo u objetivo; y el segundo determina si un mensaje subjetivo
+% es positivo, negativo o neutro.
+% 
+% En la figura~\ref{fig:clas} se muestra un esquema general del proceso de clasificación.
+% 
+% Finalmente, la investigación realizada para la implementación del sistema se 
+% presenta en esta tesis, la cual se estructuró en cinco capítulos que abordan 
+% los diferentes aspectos del trabajo realizado.
+
+%--------------------
+Una metodología para el proceso de minería de opinión en \emph{Twitter} 
+seguiría las etapas clásicas de representación y normalización de 
+los datos. En la clasificación se propone la utilización de dos etapas de
+en serie. La primera etapa donde se clasifica
+en Objetivo o Subjetivo y la segunda etapa donde se
+clasifica en Positivo, Negativo o Neutro, automatizando completamente 
+el proceso de clasificación.
+
+El preprocesamiento se realiza sobre los mensajes para obtener el texto en una 
+representación común donde se hayan eliminado los elementos que producen ruido.
+Los clasificadores generalmente se basan en el reconocimiento de estructuras
+o patrones comunes en los mensajes que pertenecen a la misma clase. La existencia
+de elementos de ruido~(palabras mal escritas, etiquetas, emoticones) 
+perturba a los clasificadores pues los provee de un contenido no deseado, que al clasificar,
+provoque que se considere diferentes a mensajes semejantes.
+
+Una vez eliminados los elementos de ruido, el mensaje resultante es procesado
+por dos clasificadores en serie. El primero de estos clasificadores determina
+si el mensaje es subjetivo u objetivo; y el segundo determina si un mensaje subjetivo
+es positivo, negativo o neutro.
+
+% 		\begin{figure}\label{clas}
+% 		\begin{center}
+% 		\includegraphics[width= 0.7\columnwidth]{Graphics/propuesta}
+% 		\end{center}
+% 		\caption{Esquema general del proceso de minería de opinión}
+% 		\end{figure}
+
+Una propuesta final de la metodología consistiría en la combinación de preprocesamiento y 
+clasificadores con los que se logre una mejor clasificación. Además, es necesaria la
+creación de un corpus con el que evaluar los resultados obtenidos en la clasificación.
+
+%------------------------
+        
+\section*{Organización de la tesis}
+El contenido de la tesis está estructurado de la siguiente forma. En el 
+capítulo 2 se presentan los conceptos de minería de textos, minería de opinión
+y sentimiento~(MOS) en \emph{Twitter} y la revisión de trabajos referentes al tema.   
+ 
+En el capítulo 3 se formula la propuesta de metodología para el proceso de minería
+de opinión y se describe cada una de sus etapas. Para ello se realiza un 
+análisis sobre la estructura de los \emph{tweets} y se propone una normalización del texto.
+También se proponen varias soluciones para reducir las dimensiones del 
+problema y se presentan los clasificadores seleccionados para determinar 
+la aparición de opiniones y la polaridad de las mismas. 
+
+En el capítulo 6 se describe la estructura y compilación del corpus desarrollado
+para idioma español. Además se discuten los resultados obtenidos para cada uno de los 
+clasificadores presentados en el capítulo anterior y se comprueba la 
+validez de la hipótesis planteada.
+
+La tesis finaliza presentando las conclusiones obtenidas como resultado de
+la investigación además de las recomendaciones para trabajos futuros. 
+
+Cerrando el trabajo se muestran las referencias
+bibliográficas consultadas durante la investigación, que ofrecen una mejor
+perspectiva y que complementan el trabajo.
+
+%Anexos?
+
+\end{introduction}

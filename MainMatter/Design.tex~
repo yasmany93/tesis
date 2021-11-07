@@ -1,0 +1,281 @@
+\chapter{Diseño del sistema}
+  La metodología analizada en el capítulo \ref{chap:background_project},
+demostró ser una idea factible a seguir en la construcción de un sistema para la
+detección de anomalías en los servicios que se brindan en una red. Tomando como
+base el modelo propuesto en ella se puede sintetizar el proceso de detección de
+anomalías en las siguientes acciones:
+\begin{itemize}
+ \item Construcción de un modelo que defina el conjunto de patrones de
+  comportamiento normal de un servicio a lo largo del tiempo.
+ \item Extracción de información útil para la caracterización del comportamiento
+  de un servicio en un período de tiempo.
+ \item Análisis del comportamiento de un servicio en un perído de tiempo para
+  determinar si este constituye o no una anomalía. 
+\end{itemize}
+
+La detección temprana de anomalías en los servicios que se brindan en una red,
+resulta de gran ayuda para el mantenimiento de la estabilidad de la misma. Sin
+embargo, la corrección de los errores provocados por estas, que constituye una
+tarea vital en la gestión de la red, sigue estando en manos de los
+administradores. Por tanto, una evolución natural de la metodología
+propuesta\cite{Gonzalez2008} sería la incorporación de un mecanismo para la
+determinación de las acciones a realizar para recuperarse de las fallas
+provocadas por las anomalías detectadas. Siguiendo las ideas planteadas en el
+capítulo \ref{chap:background_project}, se propone la determinación de estas a
+partir de las clasificaciones asociadas a la misma. Este proceso añade las
+siguientes acciones al funcionamiento del sistema:
+\begin{itemize}
+ \item Clasificación del comportamiento inusual de un servicio en un período de 
+  tiempo según las características del mismo.
+ \item Análisis de una anomalía para la determinación de las acciones a realizar
+  para la recuperación ante las fallas provocadas por esta, teniendo en cuenta las
+  clasificaciones asociadas a la misma.
+\end{itemize}
+
+Para posibilitar la adaptación del sistema ante los cambios que se producen en
+el comportamiento de un servicio, se decidió almacenar las tuplas asocidas a su
+estado en cada período de tiempo. Cada tupla almacenada tendrá asociado su tipo
+y sus clasificaciones. Por cada una de estas últimas también se almacenarán 
+las acciones correspondientes a las mismas.
+
+Todas las acciones anteriormente mencionadas pueden realizarse de forma
+independiente. Por este motivo, se definieron agentes que realizan cada una de
+ellas y se comunican de forma distribuida con las demás componentes del sistema.
+Finalmente, el funcionamiento de estos agentes como entes independientes y el
+intercambio que se produce entre ellos, definen el procedimiento general del
+sistema; el cual puede apreciarse en la figura \ref{fig:system_architecture}.
+Nótese que el sistema quedó compuesto por seis componentes denominadas:
+\emph{Collector}, \emph{Storage}, \emph{Analyzer}, \emph{Model Builder},
+\emph{Classifier} y \emph{Manager}. Cuyos funcionamientos serán explicados más
+detalladamente en la sección \ref{sec:components}. %TODO: Arreglar figura. Añadir trazas, cardinalidades en las componentes y la componente Aplicación.
+\begin{figure}
+ \begin{center}
+  \label{fig:system_architecture}
+  \includegraphics[scale=.7, keepaspectratio=true]{Graphics/structure}
+  \caption{Arquitectura del sistema.} 
+ \end{center}
+\end{figure}
+
+Como puede observarse en la figura \ref{fig:system_architecture} los
+\textit{collectors} se encargan de conformar tuplas a partir de la información
+contenida en las trazas generadas por los servicios. Cada tupla es almacenada en
+los \textit{storages} y enviada a los \textit{analyzers} para la determinación
+de su tipo (anomalía o comportamiento ``normal''). Para ello, los
+\textit{analyzers} utilizan el modelo asociado a este servicio que se encuentra
+almacenado en los \textit{storages}; el cual es reconstruido cada cierto tiempo
+por los \textit{model builders} a partir de las tuplas almacenadas en las
+componentes de almacenamiento para el mismo. Una vez clasificada, se cambia el
+tipo asociado a esta en los \textit{storages} y en caso de ser etiquetada como
+anomalía es enviada a los \textit{classifiers}. Estos últimos se encargan de
+clasificarla teniendo en cuenta las posibles causas que le dieron origen,
+cambiar las clasificaciones asociadas a ella en las componentes de
+almacenamiento y enviarla a los \textit{managers}. Donde se procede a determinar
+las acciones de recuperación que deben realizarse y se envía todo la información
+recopilada a lo largo de este proceso a la aplicación del sistema. Donde se
+ejecutarán las acciones especificadas de ser posible, se informará a los
+usuarios de ser necesario y se generarán las notificaciones pertinentes en
+archivos de reportes.
+
+Como puede apreciarse este sistema está basado en una arquitectura distribuida
+donde la comunicación entre las diferentes componentes resulta imprescindible
+para el funcionamiento del mismo. Basándose en sus características y necesidades
+se decidió utilizar el modelo RMI; las razones que sustentan está selección son
+explicadas en la sección \ref{sec:model_comunication}. Este tipo de sistema debe
+persistir ante la ocurrencia de fallas, por lo cual su funcionamiento no puede
+verse afectado ante dichos eventos. Para lograr este propósito existen varias
+técnicas que aportan al sistema un mayor grado de tolerancia a los fallos,
+aunque no logran hacerlo completamente infalible a ellos. En la sección
+\ref{sec:fault_tolerance} se explican las estrategias utilizadas en esta
+aplicación para lograr dicho objetivo. De igual manera, resulta importante el
+mantenimiento de la consistencia de los datos así como la persistencia de los
+mismos; que usualmente es lograda mediante la replicación de estos. Dicha
+técnica es utilizada en el sistema para evitar la perdida de los datos ante la
+caída de una componente de almacenamiento, la cual suele crear algunos problemas
+de consistencia que deben ser resueltos para mantener el correcto funcionamiento
+del sistema. Sobre este tema se aborda en la sección
+\ref{sec:replication_consistency}.
+
+\section{Componentes}
+\label{sec:components}
+Las componentes que integran este sistema desempeñan un papel de suma
+importancia dentro del mismo. Cada una de ellas es insustituible por cualquier
+otra, pues realizan tareas completamente diferentes sin las que el
+funcionamiento de esta aplicación resulta imposible. A continuación se explica
+el comportamiento de cada una de ellas.
+
+\subsection{Model Builder}
+La componente \textit{Model Builder} es la encargada de construir el modelo
+asociado a un servicio dado. Para ello se aplican algoritmos de detección de
+\textit{outliers} sobre los datos relativos a este servicio que se han
+almacenado en los \textit{storages}. Obteniéndose como resultado un agrupamiento
+en conjuntos compuestos por elementos similares, y la exclusión de aquellos que
+no se ajustan a ninguno de los patrones descritos por dichos grupos. Más tarde,
+a partir de estos conjuntos de patrones se construye un modelo mátematico simple
+que represente dichos perfiles de normalidad y se almacena este en los
+\textit{storages}, en sustitución del que estaba anteriormente. Este proceso se
+puede observar en la figura \ref{fig:model_process}
+
+\begin{figure}[h!]
+ \begin{center}
+  \includegraphics[scale=.4, keepaspectratio=true]{Graphics/model}  
+ \end{center}
+ \caption{Estructura del \emph{Model Builder}.} 
+ \label{fig:model_process}
+\end{figure}
+
+\subsection{Collector}
+El \textit{Collector} es el encargado de recolectar los datos necesarios de los
+archivos de trazas de un servicio, correspondientes a un intervalo específico de
+tiempo; para conformar una tupla con los valores asociados a cada uno de ellos.
+Dicha tupla representa el comportamiento del servicio en el período de tiempo
+dado. Una vez conformada, esta es enviada de forma distribuida a los
+\textit{analyzers} del sistema para su clasificación en anomalía o
+comportamiento normal; y a los \textit{storages} para su almacenamiento. El
+proceso anteriormente descrito puede observarse en la figura
+\ref{fig:collector_process}.%TODO: Arreglar figura.
+
+\begin{figure}[h!]
+ \begin{center}
+  \includegraphics[scale=.4, keepaspectratio=true]{Graphics/collector}  
+ \end{center}
+ \caption{Estructura del \emph{Collector}.} 
+ \label{fig:collector_process}
+\end{figure}
+
+\newpage
+\subsection{Analyzer}
+El \textit{Analyzer} es el encargado de analizar las tuplas que representan el
+comportamiento de un servicio en un intervalo de tiempo dado, con el objetivo de
+determinar si estas se ajustan a los patrones de normalidad establecidos en el
+modelo correspondiente al mismo. Este último es solicitado a un \textit{storage}
+asociado a dicho servicio. Si se determina que una tupla constituye una
+anomalía, se cambia el tipo asociado a la misma en los \textit{storages} en que
+se encuentre almacenada y  se envía a los \textit{classifiers} para su posterior
+clasificación. Este proceso puede observarse en la figura
+\ref{fig:analyzer_process}.%TODO: Arreglar imagen.
+
+\begin{figure}[h!]
+ \begin{center}
+  \includegraphics[scale=.4, keepaspectratio=true]{Graphics/analyzer}
+  \caption{Estructura del \emph{Analyzer}.} 
+ \end{center}
+\end{figure}
+
+\newpage
+\subsection{Classifier}
+El agente \textit{Classifier} se encarga de clasificar las tuplas recibidas de
+los \textit{analyzers}, teniendo en cuenta sus características. Las
+clasificaciones asociadas a dichas tuplas representan la causa que dió origen a
+esa anomalía o el problema subyacente. Una vez clasificadas, se le asocian
+dichas clasificaciones a las tuplas dadas en los \textit{storages} en que se
+encuentran almacenadas y son enviadas a los \textit{managers} con el objetivo de
+que las acciones a realizar para recuperarse de las fallas provocadas por estas
+sean determinadas. El proceso que realiza esta componente puede observarse en la
+figura \ref{fig:classifier_process}.%TODO: Arreglar imagen.
+
+\begin{figure}[h!]
+ \begin{center}
+  \label{fig:classifier_process}
+  \includegraphics[scale=.4, keepaspectratio=true]{Graphics/classifier}
+  \caption{Estructura del \emph{Classifier}.} 
+ \end{center}
+\end{figure}
+
+\subsection{Manager}
+El \textit{Manager} es el encargado de determinar las acciones a realizar para
+las tuplas recibidas teniendo en cuenta las características de estas y las
+clasificaciones asociadas a las mismas. Una vez determinadas las acciones a
+realizar estas son notificadas a la aplicación, la cual se encargará de
+ejecutarlas o notificar a los administradores, dejando en sus manos la ejecución
+de las mismas. El proceso anteriormente descrito se observa en la figura
+\ref{fig:manager_process}.
+
+\begin{figure}[h!]
+ \begin{center}
+  \label{fig:manager_process}
+  \includegraphics[scale=.4, keepaspectratio=true]{Graphics/manager}
+  \caption{Estructura del \emph{Manager}.} 
+ \end{center}
+\end{figure}
+
+\subsection{Storage}
+La componente \textit{Storage} es la encargada de almacenar las tuplas
+recolectadas por los \textit{collectors} con su tipo(anomalía o comportamiento
+normal) correspondiente y las clasificaciones asociadas a la misma, en caso de
+que sea una anomalía. También almacena el modelo correspondiente a los servicios
+cuyos datos conserva y las acciones asociadas a cada clasificación, con el
+objetivo de posibilitar el aprendizaje en la determinación de las acciones a
+realizar para la recuperación ante las anomalías detectadas.
+
+\section{Comunicación}
+\label{sec:model_comunication}
+Para el intercambio de información entre los diferentes agentes que componen el
+sistema se utiliza un mecanismo de comunicación basado en el modelo RMI. Los
+mecanismos basados en el traspaso de mensajes fueron descartados pues como se
+pudo apreciar en la sección \ref{communication}, estos son utilizados para
+lograr realizar acciones en paralelo y no tener que esperar por la respuesta de
+los servidores. Características que no son propias de este sistema, además son
+muy complejos, de ahí que la selección del modelo de comunicación quedase entre
+los mecanismos de comunicación: RPC y RMI. 
+
+En la sección \ref{communication} se aprecia que ambos modelos (RPC y RMI)
+tienen  varias características en común, aunque RMI particularmente ofrece la
+posibilidad de enviar objetos por referencia de forma transparente al usuario,
+facilidad que no está permitida en RPC. Además en los sistemas distribuidos
+basados en agentes, como es el caso de esta aplicación, resulta lógica y simple
+su representación como objetos. Por estos motivos, teniendo en cuenta que ambos
+ofrecen las funcionalidades necesarias para el funcionamiento de este sistema y
+las facilidades ofrecidas por RMI, se decidió utilizar un mecanismo basado en
+este modelo para la comunicación entre componentes.%TODO: Mejorar por qué RMI. Ver ideas del paper del Flaco de la UCI. Poner ref a dicho paper.
+
+\section{Tolerancia a fallas}
+\label{sec:fault_tolerance}
+Como el sistema propuesto es completamente distribuido, todas las componentes
+que lo integran pueden cumplir sus funcionalidades sin que se vean afectadas por
+la disponibilidad de las restantes. Sin embargo, esto no garantiza el correcto
+funcionamiento del sistema, pues ante la falla de cualquiera de las componentes,
+este se quedaría sin ningún agente que asumiera sus funciones dentro del mismo.
+Para solucionar este problema, en la literatura usualmente se sugiere la
+replicación de las componentes que lo conforman y su distribución en la red, de
+forma que al menos dos agentes del mismo tipo no se encuentren localizados en la
+misma computadora\cite{Tanenbaum2007}. De esta manera se garantiza que si una
+máquina falla, existirá alguna componente que pueda realizar las funciones que
+realizaban los agentes contenidos en ella. 
+
+Otra falla previsible en el flujo del sistema consiste en la perdida de los
+datos debido a un problema en la componente encargada de su procesamiento en un
+momento dado. Para evitar dicho problema se recomienda que estos sean procesados
+de manera independiente por al menos dos de las componentes disponibles
+encargadas de dicho proceso. Como es de interés para el sistema el mantenimiento
+de una carga de procesamiento balanceada entre sus componentes, esta debe
+tenerse en cuenta para la selección de las componentes encargadas de realizar el
+procesamiento de los datos en cada momento.
+
+\section{Replicación y Consistencia}
+\label{sec:replication_consistency}
+Como se mencionó anteriormente, este sistema reconstruye el modelo asociado a un
+servicio cada cierto tiempo, para garantizar que se represente su comportamiento
+actual. Para ello, se toma como base los datos almacenados en los
+\emph{storages} correspondientes a dicho servicio. Si alguno de los datos
+asociados a un intervalo de tiempo no estuviese disponible, la reconstrucción de
+dicho modelo se vería afectada. Por esta razón, para garantizar una mayor
+persistencia de los datos en el sistema resulta fundamental su replicación en
+una cantidad considerable de \emph{storages}. Usualmente estas estrategias
+suelen crear problemas de consistencia en los datos debido a las actualizaciones
+realizadas sobre las diferentes copias existentes\cite{Tanenbaum2007}, sin
+embargo en este caso en particular, no se ve afectada pues una vez almacenados
+estos no son modificados.
+
+Esta problemática se aprecia de forma similar en el almacenamiento del modelo
+del comportamiento ``normal'' de un servicio, pues como se observa en la figura
+\ref{fig:analyzer_process} este resulta imprescindible para el funcionamiento de
+los \emph{analyzers} del sistema. Por este motivo, se hace necesaria su
+replicación en todos los \emph{storages}, para garantizar su persistencia en el
+sistema. Esta solución, trae aparejada la incorporación de inconsistencias en
+este último, pues si un \emph{Storage} no se encuentra disponible durante la
+actualización del modelo en las componentes de almacenamiento, este quedará
+desactualizado con respecto al resto. Luego, si en alguna ocasión se obtuviese
+el modelo de dicho \emph{Storage} antes de la próxima actualización, el
+funcionamiento del sistema se vería afectado ante la posible errónea
+clasificación de los datos analizados. Estos problemas de consistencia deben
+resolverse en la implementación del sistema.

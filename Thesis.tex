@@ -1,0 +1,78 @@
+\documentclass[11pt,oneside]{uhthesis}
+\usepackage{subfigure}
+%\usepackage[margin=1in]{geometry}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{float} %instalar manana
+
+\graphicspath{{Graphics/}}
+\newcommand{\head}[1]{\textnormal{\textbf{#1}}}
+\tcbuselibrary{listingsutf8}
+\newtcolorbox[auto counter, number within=section]{example}[2][]
+{colback=gray!5!white,colframe=black,
+fonttitle=\bfseries, title=Ejemplo~\thetcbcounter: #2,#1}
+%\geometry{left=1cm}
+%\geometry{right=1cm}
+\newtcolorbox[auto counter, number within=section]{example2}[2][]
+{colback=gray!5!white,colframe=black,
+fonttitle=\bfseries}
+
+\title{TkHURSv1.1: SOFTWARE ESTADÍSTICO PARA CALCULAR LOS PERÍODOS DE RETORNO DE HURACANES}
+\author{Yasmany David Morejón Cruz}
+\advisor {
+Dra. Vivian Sistachs Vega
+\\
+MSc. Pedro Roura Pérez 
+}
+\degree{Licenciado en Ciencia de la Computación}
+\faculty{Facultad de Matemática y Computación}
+\date{La Habana, 2020}
+\logo{Graphics/uhlogo}
+\makenomenclature
+
+\hyphenation{ta-re-as arro-jan na-tu-ral cons-ti-tu-yen di-fe-ren-cia pro-ble-ma pa-la-bra 
+	ocu-rren-cias pro-pues-tas mo-di-fi-ca-dor va-lo-res e-le-men-to opi-nión 
+	fun-da-men-tal-men-te dis-tri-bu-ir mi-ne-ría di-fe-ren-tes re-cons-truir
+	dis-mi-nu-ción de-sa-rro-llan-do de-sa-rro-lla-ron
+	in-fe-ren-cia po-si-ti-va es-tre-llas opi-nio-nes di-fe-ren-te pa-la-bras
+	si-no-ni-mia ne-ga-ti-vo ne-ga-ti-va sub-es-pa-cio va-rian-za apro-xi-ma-da
+	ejem-plos se-pa-ra-dor co-rri-das} 
+
+\begin{document}
+\frontmatter
+\maketitle
+
+\include{FrontMatter/Dedication}
+%\include{FrontMatter/Acknowledgements}
+\include{FrontMatter/SupervisorOpinion}
+\include{FrontMatter/Abstract}
+\include{FrontMatter/Contents}
+
+\mainmatter
+\include{MainMatter/Introduction}
+\include{MainMatter/Background}
+\include{MainMatter/Dremio}
+\include{MainMatter/Development}
+\include{MainMatter/Experiments}
+%\include{MainMatter/Conclusiones}
+%\include{MainMatter/Recomendations}
+%\include{MainMatter/Corpus}
+%\include{MainMatter/Preprocessing}
+%\include{MainMatter/Clasification}  
+%\include{MainMatter/Basis}
+%\include{MainMatter/Design}
+%\include{MainMatter/ImplementationDetails}
+%\include{MainMatter/ServicesImplementation}
+
+\backmatter
+\include{BackMatter/Conclutions}
+\include{BackMatter/Anexos}
+\include{BackMatter/Bibliography}
+%\include{BackMatter/Glosary}
+
+\end{document}

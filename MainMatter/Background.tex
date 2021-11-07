@@ -1,0 +1,166 @@
+\chapter{Marco teórico}
+
+%\section{Materiales y métodos}
+La climatología de los ciclones tropicales que se han formado en la cuenca Atlántica ha sido una temática abordada por numerosos autores desde enfoques diferentes a lo largo de muchos años \cite{DK76, DK1, DK7}. Para realizar esta investigación fueron utilizadas como fuentes directas de información metodológica y de datos la Cronología de los Huracanes de Cuba actualizada \cite{DK5} y la Base de Datos de Huracanes del Atlántico “Hurdat2” \cite{DK3}. Se tomaron en cuenta los ciclones tropicales que afectaron el territorio cubano en el período 1791-2018. 
+
+\section{Modelo de Poisson}
+El Modelo de Poisson es una ley de probabilidad que está asociada, en muchos casos, a fenómenos naturales con baja frecuencia de ocurrencia. La variable discreta $X$ que cuenta el número de huracanes por año que han azotado a Cuba, puede ser caracterizada mediante la función de masa de probabilidad o función de cuantía \cite{DK6}:\\
+
+\begin{equation}
+P(x) = e^{-\lambda}*{\lambda^{x}\over x!} = P(X = x)\ donde\ x = 0,1,2,...
+ \end{equation}
+ 
+ La media y la varianza son iguales, o sea:\\
+\begin{equation}
+E(x)=V(x)=\lambda                                                                                                              
+ \end{equation}
+
+Que tiene la fórmula de recurrencia:\\
+\begin{equation}
+P(x)=\left({\lambda \over x}\right) * P(x-1)\  donde\ x=1,2,…
+\end{equation}
+ 
+
+
+
+ Y la función de distribución acumulativa:\\
+ \begin{equation}
+F(x)=\sum_{t=0}^{x}P(t) = p(X\leq x)\  donde\ x=0,1,2,…                                                          
+ \end{equation}
+ 
+ Donde $p(X\leq x)$ es la probabilidad de ocurrencia del suceso $(X\leq x)$ ; $P(x)$ y $F(x)$ están tabuladas para distintos valores de $\lambda$, que es un parámetro poblacional que se estima mediante la expresión:\\
+ 
+\begin{equation}
+\hat{\lambda} =\bar{x} = {\sum_{i=0}^{N}f_i * x_i \over \sum_{i=0}^{N}f_i}
+\end{equation}
+ 
+Que es la media muestral , donde $f_i$ es la frecuencia observada de la clase i-ésima donde  $i=0,1,2,…,N$ y\\
+
+\begin{equation}
+\sum_{i=0}^{N}f_i = n                                                        
+ \end{equation}
+ 
+ es la frecuencia observada total.\\       
+ 
+ Si $\hat{p_i} =\hat{p}(X=i)$  donde $i=0,1,2,…,N$ es la probabilidad estimada de la clase i-ésima bajo
+el modelo, entonces: 
+
+\begin{equation}
+\hat{f_i} = n\hat{p_i}                                                     
+\end{equation}                                                                                   
+\\                                                                                                                                                                                                                                    
+es la frecuencia esperada de la clase i-ésima;
+                                                                                                                                                                                                                                  
+\begin{equation}
+\hat{Q_k}=\sum_{i=0}^{k}\hat{P_i}                                                     
+\end{equation}
+\\
+o sea, 
+
+\begin{equation}
+\hat{Q_0}=\hat{P_0},\hat{Q_1}=\hat{P_0}+\hat{P_1},…,\hat{Q_k}=\hat{P_0}+\hat{P_1}+\cdots+\hat{P_k}
+\end{equation}
+\\
+es la probabilidad acumulada hasta la clase k-ésima y el período de retorno es:
+
+\begin{equation}
+\hat{T_k}=\left\lbrace\begin{array}{c} 
+{1 \over \hat{Q_k}}~si~\hat{Q_k} < 0.5 \\ 
+{1 \over{1 - \hat{Q_k}}}~si~\hat{Q_k} > 0.5 
+\end{array}\right.
+\end{equation}
+\\
+
+
+\section{Bondad de ajuste}
+
+Este es el período de retorno de los sucesos que corresponden a las probabilidades $\hat{p}$ acumuladas según $Q_k$; si, en general, las frecuencias esperadas $\hat{f_i}$ por un modelo $\varphi_x$ (asociado a la variable $X$) difieren poco de las frecuencias observadas $f_i$ , es de suponer que dicho modelo se ajusta a los datos experimentales y la ``bondad de ajuste'' puede ser verificada mediante la dócima de Ji-Cuadrado $\chi^{2}$ \cite{DK10}, debido a que estamos tratando con variables discretas es la mejor opción.\\  % Kolmogorov-Smirnov que es más potente estadísticamente que la dócima Ji-Cuadrado $\chi^{2}$.
+
+\subsection{Prueba Ji-Cuadrado $\chi^{2}$}
+
+Sea la prueba de hipótesis:\\
+
+$H_0$ : $P = P_0$ (corresponde a una distribución Poisson)\\
+
+$H_1$ : $P\not= P_0$ (no corresponde a una distribución Poisson)\\
+
+\textbf{Los pasos a seguir para la correcta aplicación del test son los siguientes:}\\
+\begin{itemize}
+\item Crear clases $A_1, \ldots,A_k$ atendiendo al tipo de variable (continua o discreta).
+
+\item Hallar las frecuencias absolutas observadas $O_1, \ldots,O_k$ en las clases creadas. Obviamente se cumple 
+que $O_1 + O_2 +\ldots+ O_k = n$.
+
+\item Hallar las frecuencias absolutas esperadas $E_1, \ldots,E_k$ en las clases creadas: $E_i = nP_i$, donde $P_i = P(X \in A_i)$. Por lo general se exige que $mín_i E_i \geq 5$. Cuando esto no se veriﬁca es necesario agrupar clases para conseguir que se cumpla la restricción.
+
+\item Construir el estadígrafo de Pearson\\
+
+\begin{equation}
+\chi^{2} = \sum_{i=1}^{k}{{(O_i - E_i)^{2}} \over E_i}
+\end{equation}
+
+\item Región crítica:\\
+
+\begin{equation}
+\omega_{\alpha} = \left\{x \in \Omega : \chi^{2} > \chi^{2}_{1-\alpha}(k - r - 1)\right\}
+\end{equation}
+
+donde $r$ es el número de parámetros libres bajo $H_0$, o sea,es el número de parámetros que se han de estimar para el cálculo de las probabilidades. En este caso particular $r = 1$ porque el único parámetro a estimar es $\lambda$.
+\end{itemize}
+
+
+\textbf{En el software también está presente la prueba Kolmogorov-Smirnov, debido a esto se cree necesario explicar en que consiste} \cite{DK10}.\\
+
+\subsection{Prueba Kolmogorov-Smirnov}
+
+Sea la prueba de hipótesis:\\
+
+$H_0$ : $X \sim \varphi_x$  (Sea continua o discreta la ley) \\
+
+$H_1$ : $X \not\sim \varphi_x$ (Sea continua o discreta la ley) \\
+
+El estadígrafo de la dócima es:
+
+\begin{equation}
+D = max_k|s_k - \hat{s_k}|\ donde\ k=0,1,2,...,N 
+\end{equation}
+\\
+ donde:
+ 
+\begin{equation}
+S_k=s\sum_{i=0}^{k}{f_i \over n}\  donde\ k=0,1,2,…,N
+\end{equation}
+\\
+y
+
+\begin{equation}
+\hat{S_k}=\sum_{i=0}^{k}{\hat{f_j} \over n}\ donde\ k=0,1,2,…,N
+\end{equation}
+\\
+Rechazamos $H_0$ si $D\geq D_{n;\alpha}$ donde $D_{n;\alpha}$ es el valor crítico de la tabla de Kolmogorov-Smirnov con el nivel de significación $\alpha$ prefijado. En particular si $ n>35$:
+
+
+\begin{equation}
+D_{n;\alpha}=\left\lbrace\begin{array}{c} 
+1.63⁄\sqrt{n}~si~\alpha=0.01=1\% \\ 
+1.36⁄\sqrt{n}~si~\alpha=0.05=5\% \\
+1.22⁄\sqrt{n}~si~\alpha=0.10=10\%
+\end{array}\right.
+\end{equation}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,10 @@
+-Volver a revisar Background.tex: 
+	 
+-Volver a Development.tex:
+	 - mejorar los comentarios a cada imagen
+	 
+-Incluir Chi cuadrado en la leyenda, tanto en el software como en la tesis
+-Cambiar la paleta de colores de los graficos a una en la q se pueda identificar mejor cada elemento
+
+-Arreglar la forma en la q calculo Chi cuadrado en el software
+-Hacer fotos nuevas despues de terminar los cambios en el software para ponerlas en la tesis

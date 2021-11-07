@@ -1,0 +1,25 @@
+\begin{opinion}
+\begin{opinion}
+
+Twitter es, en la actualidad uno de los grandes protagonista de la red global. Esta plataforma de comunicación ha establecido a base de popularidad una nueva forma de comunicación: \emph{el microblogging}. Luego de 7 años de uso y más de 500 millones de usuarios, Twitter se ha convertido una plataforma esencial para el seguimiento, difusión y coordinación de eventos de diversa naturaleza e importancia, como puede ser una campaña presidencial o el actual conflicto en Siria. Permitiendo analizar en un mismo escenario el impacto y la repercusión de un evento específico, a nivel global.
+
+Un aspecto fundamental para los análisis a realizar en Twitter radica en conocer la naturaleza de las opiniones que expresan los usuarios con sus mensajes. Obteniendo así gran interés el desarrollo de un proceso de minería de opinión que se ajuste y aproveche las características de la red para su desempeño.
+
+Este fue el reto asumido por la estudiante Suilan Estévez Valverde, proponer una metodología para el desarrollo de minería de opinión sobre Twitter. Con este fin Suilan tuvo que analizar las técnicas convencionales de minería de opinión para adaptarlas a esta red, luego de un análisis profundo de las plataformas de microblogging. Así, en esta exploración inicial, surgió la idea de un procesamiento especial del texto para solucionar la gran variedad de jergas, emoticones y la faltas de ortografía que abundan en esta red. Además se planteó el uso de dos clasificadores en serie para determinar la objetividad del mensaje y luego la polaridad (positivo o negativo) 
+de los mensajes subjetivos. Estas ideas iniciales marcaron el desarrollo de un satisfactorio Trabajo de Diploma.
+
+Desde estos primeros pasos, la estudiante demostró gran entusiasmo e independencia durante la investigación traduciéndose en gran empeño y seriedad para desarrollarla. Así se enfrentó al proceso de elaboración de este trabajo durante el cual tuvo que consultar amplia literatura científica actualizada, analizando las ventajas de cada una de las propuestas estudiadas. Este análisis permitió luego proponer una propuesta definitiva similar a la diseñada durante la fase inicial. Para ello fue necesario la aplicación de su conocimiento integrado por varias áreas de la Ciencia de la Computación aprendidos durante la carrera, que en muchos casos fueron profundizados por la naturaleza propia del contexto, mostrando además gran creatividad y capacidad de polemizar en la búsqueda de soluciones a cada problema presentado.
+
+De esta forma se pudo presentar una metodología completa para determinar la opinión subyacente en un \emph{tweet} siendo esta validada por procedimientos empíricos. Estos experimentos también permitieron presentar la propuesta, con parámetros y algoritmos concretos, que permite una implementación futura de dicha estrategia.
+
+Todo este trabajo se encuentra reflejado en el informe escrito, donde se presentan los detalles de la investigación. En su redacción la estudiante mostró un buen dominio del idioma y excelentes habilidades para transmitir ideas complejas mediante adecuadas gráficas, tablas y diagramas que complementan al texto para describir el proceso de investigación y los resultados obtenidos.
+
+A estos resultados, se le suma que Suilan ha sido durante los años de carrera una estudiante con muy buenos resultados docentes y siempre vinculada a las investigaciones realizadas en la facultad. Siendo entonces este trabajo el colofón a un desempeño que hemos seguido desde que ingresara a la facultad y hemos tenido el placer de verlo florecer durante estos años. Así, por todos estos motivos, solicito para la estudiante Suilan Estévez Valverde la calificación de Excelente (5 puntos) para que de esta manera concluya sus estudios, obteniendo el título de Licenciada en Ciencia de la Computación y comience, por derecho propio, su camino como profesional de la computación.
+
+\vfill
+\begin{flushleft}
+\underline{\hspace{140pt}}\hfill \underline{\hspace{140pt}}\\
+Dr. Yudivián Almeida Cruz \hfill Lic. Ariel Hernández Amador \hspace*{7pt}
+\end{flushleft}
+\end{opinion}
+\end{opinion}

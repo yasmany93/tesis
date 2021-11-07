@@ -1,0 +1,444 @@
+\chapter{Experimentación y Resultados}
+\label{chap:exp}
+
+	En este capítulo se muestran los resultados obtenidos
+	en los experimentos realizados con el fin de evaluar
+	la propuesta de metodología definida en el capítulo
+	\ref{chap:desarrollo}. Se detalla el corpus utilizado
+	y los resultados obtenidos en cada fase de la clasificación.
+	Concluye con la propuesta general que presenta mejores 
+	resultados.
+
+\section{Creación del corpus}
+
+Experimentar con el proceso de minería de Opinión, requiere de 
+un conjunto de entrenamiento y un conjunto de prueba para evaluar 
+las etapas de la metodología. El conjunto de entrenamiento y el conjunto 
+de prueba se definen como una secuencia 
+de \emph{tweets} con una clasificación 
+asignada~(Objetivo, Positivo, Negativo, Neutro). O sea, 
+un corpus de mensajes de \emph{Twitter} clasificados a mano por personas.
+
+Una intencionalidad del trabajo es que funcione sobre idioma español, ya
+existen pocas herramientas para resolver este problema. 
+
+La colección de mensajes fue construida a partir de una selección aleatoria de 100000 mensajes 
+de \emph{Twitter} que fueron posteriormente filtrados por idioma. Obteniéndose 22850 mensajes
+en español, que se fueron clasificados a mano hasta conformar el corpus actual.
+El corpus está compuesto por:  
+
+\begin{itemize}
+  \item 1562 mensajes.
+  \item 899 subjetivos y 663 objetivos
+  \item 416 positivos, 248 negativos y 235 neutros
+\end{itemize}
+
+%Tabla con ejemplos de mensajes de cada tipo
+%TODO
+
+\subsection{Criterios para etiquetar el corpus}
+%revisados los mensajes 
+%porque se determinaron solo esas clasificaciones
+%que otras pueden tenerse en cuenta 
+%que significa cada clasificación
+%ejemplos
+ 
+ A partir de una revisión general a los mensajes, se determinó
+ clasificar solo en las categorías Objetivo, Subjetivo y esta última en Positivo, Negativo, Neutro.
+ Una gran cantidad de categorías o contar con categorías similares hace más compleja la tarea
+ de clasificación para los seres humanos. Por tanto se determinó utilizar pocas categorías, que resultaran 
+ bien diferentes a los usuarios. Las categorías se especifican como: 
+ 
+ \begin{description}
+  \item[Objetivo:] Son mensajes que plasman un hecho, a menudo noticias.
+  \item[Subjetivo:] Donde se expresa una opinión, se da un criterio.
+  \item[Positivo:] Solo es aplicable a mensajes Subjetivos donde la opinión expresada es
+  Positiva, se considera favorable por el autor.
+  \item[Negativo:] Solo es aplicable a mensajes Subjetivos donde la opinión expresada es
+  Negativa, se considera desfavorable por el autor.
+  \item[Neutro:] Solo es aplicable a mensajes Subjetivos donde se expresa una opinión,
+  pero esta no es negativa, ni positiva.
+ \end{description}
+ 
+ Además se determinaron un conjunto de categorías, en que pueden clasificarse los mensajes aunque no fueron 
+ utilizadas en la clasificación final. A menudo estás categorías se solapan con otras y crean confusión. 
+ Aparecen en el texto fundamentalmente mezcladas con chistes, ironía y metáforas.
+ 
+ \begin{description}
+  \item[Interrogativo:] Mensajes en los que se plantean preguntas.
+  \item[Irónico:] Mensajes donde se expresa una opinión contradictoria.
+  \item[Compuesto:] Mensajes donde aparece más de una clasificación, por ejemplo se expresan
+  dos opiniones diferentes.
+  \item[Reflexivo:] No se da una valoración directa de un tema, pero se expresa una opinión.
+  A menudo aparecen en forma de consejos o frases célebres.  
+ \end{description}
+
+Para la creación del corpus se construyó una aplicación sobre la plataforma .Net donde 
+los usuarios pudieran clasificar los
+mensajes rápidamente. Los mensajes clasificados se almacenan en un archivo aparte y 
+se eliminan del conjunto original. 
+El mensaje a clasificar en cada momento se elige aleatoriamente. 
+La aplicación se distribuyó entre 10 usuarios aproximadamente para que realizaran las tareas
+de clasificación. 
+
+\section{Resultados}
+
+Los experimentos fueron realizados con el objetivo de determinar que algoritmos dan mejores 
+resultados en cada una de las fases y avalar la metodología planteada.
+Para ello se tuvieron en cuenta una gran variedad de métodos de aprendizaje, fundamentalmente
+clasificadores supervisados, en los que se concentra la propuesta.
+
+Primero se realiza una comparación inicial entre las combinaciones de algoritmos 
+para disminuir la cantidad de experimentos. Los métodos que resultan más prometedores
+son utilizados en los experimentos posteriores para clasificar en objetivo-subjetivo y
+en positivo-negativo-neutro. Finalmente se analizan los resultados de la propuesta general
+basada en el mejor resultado para cada clasificación.
+
+\subsection{Comparación Inicial}
+	Para determinar las mejores combinaciones entre todos los algoritmos propuestos
+	se requiere una gran cantidad de experimentos, de una larga duración. Por
+	lo tanto se propone hacer una corrida inicial, donde se prueben todas las combinaciones
+	una sola vez. Para validar los resultados obtenidos se realizan análisis más
+	profundos con las mejores combinaciones obtenidas. Los resultados alcanzados 
+	son utilizados para analizar la calidad de cada algoritmo empleado en cada fase
+	de manera independiente. Se reporta la precisión obtenida en cada tipo de 
+	preprocesamiento promediada sobre todas las combinaciones de \emph{clusters},
+	algoritmos de descomposición y clasificadores, ver figura~\ref{prep1}. Un análisis similar se realiza con 
+	cada algoritmo de cada una de las fases siguientes como puede verse en 
+	las figuras~\ref{clus1},~\ref{desc1} y~\ref{clas1}.
+	De esta forma se comparan los algoritmos de una etapa disminuyendo el sesgo introducido
+	por algoritmos de otras etapas.
+	
+	%TODO 4 tablas o gráficas con los resultados de correr todos
+		\begin{figure}
+		\begin{center}
+		\includegraphics[width= 0.8\columnwidth]{Graphics/prep}
+		\caption{Precisión de los preprocesamientos.}
+		\label{prep1}
+		\end{center}
+		\end{figure}
+		\begin{figure}
+		\begin{center}
+		\includegraphics[width= 0.6\columnwidth]{Graphics/desc}
+		\caption{Precisión de los algoritmos de descomposición.}
+		\label{desc1}
+		\end{center}
+		\end{figure}
+		\begin{figure}
+		\begin{center}
+		\includegraphics[width= 0.6\columnwidth]{Graphics/clust}
+		\caption{Precisión de los algoritmos de \emph{clustering}.}
+		\label{clus1}
+		\end{center}
+		\end{figure}
+		\begin{figure}
+		\begin{center}
+		\includegraphics[width= 1\columnwidth]{Graphics/class}
+		\caption{Precisión de los clasificadores.}
+		\label{clas1}
+		\end{center}
+		\end{figure}
+	
+	En los resultados anteriores se pueden observar que los algoritmos de preprocesamiento
+	son equivalentes con la excepción de la corrección ortográfica que muestra 
+	peores resultados. Esto se debe a que el corrector ortográfico elige a 
+	menudo palabras incorrectas y modifica el sentido de el mensaje.
+	
+	En los algoritmos de descomposición los mejores resultados se obtienen
+	con PCA y ICA. Los algoritmos de \emph{clustering} resultan mucho más
+	susceptibles a la parametrización que los algoritmos de descomposición.
+	Por lo tanto la reducción de dimensiones obtiene mejores resultados con los últimos.
+	
+	En la clasificación los algoritmos con resultados más notables
+	fueron: Rocchio, Linear SVM, Decition Tree y en un segundo lugar:
+	Ridge, Perceptron Linear y Passive-Aggressive.
+	Los clasificadores lineales, debido a la naturaleza esparcida 
+	de los datos, obtienen muy buenos resultados. Además estos 
+	algoritmos, más simples, son menos sensibles al ajuste de parámetros.
+	
+\subsection{Clasificación Objetivo-Subjetivo}\label{OS}
+
+	Para determinar la mejor clasificación en objetivo o subjetivo~(OS)
+	se desarrollaron experimentos
+	sobre el corpus descrito.
+	Se realizaron 30 corridas con 6 clasificadores, 2 tipos de preprocesamiento y 
+	2 algoritmos de descomposición, según los resultados obtenidos
+	en la comparación inicial.
+	Para evaluar la calidad de la solución se utilizó la validación cruzada
+	con un $60\%$ del corpus 
+	para entrenar y un $40\%$ para validar.
+	
+	Una primera etapa de experimentación se realizó para observar el comportamiento 
+	de la clasificación Objetivo-Subjetivo. En la tabla~\ref{tabProm} se ve la
+	precisión de esta clasificación y en la tabla~\ref{tabDes} se ve la
+	desviación estándar.
+	
+	\begin{table}[htb]
+	\begin{center}
+	\small{
+	\begin{tabular}{l c c c c c c}
+	\hline
+	 & Ridge & Perceptron & Rocchio & $SMV_L$ & Pas-Agg & DTree \\
+	\hline
+	 Simple + PCA & \textbf{71}\% & 65\% & \textbf{71}\% & \textbf{71}\% & 63\% & 66\% \\
+	 Simple + ICA & \textbf{70}\% & 64\% & \textbf{71}\% & 57\% & 67\% & 65\% \\
+	 Clean + PCA & \textbf{72}\% & 65\% & \textbf{71}\% & \textbf{71}\% & 63\% & 67\% \\
+	 Clean + ICA & \textbf{71}\% & 64\% & \textbf{71}\% & 57\% & 68\% & 65\% \\
+	\end{tabular}
+	}
+	\end{center}
+	\caption{Precisión de cada clasificador, según el
+	preprocesamiento y descomposición aplicada, clasificando en Objetivo o Subjetivo.\label{tabProm}}
+	\end{table} 
+	
+	\begin{table}[htb]
+	\begin{center}
+	\small{
+	\begin{tabular}{l c c c c c c}
+	\hline
+	& Ridge & Perceptron & Rocchio & $SMV_L$ & Pas-Agg & DTree \\
+	\hline
+	Simple + PCA & 1.41\% & 3.16\% & 1.41\% & 1.73\% & 4.47\% & 2.45\% \\
+	Simple + ICA & 2.00\% & 5.48\% & 1.41\% & 1.41\% & 4.47\% & 2.83\% \\
+	Clean + PCA & 1.73\% & 4.47\% & 1.41\% & 1.41\% & 6.32\% & 2.65\% \\
+	Clean + ICA & 1.73\% & 7.07\% & 1.41\% & 1.41\% & 3.16\% & 2.45\% \\
+	\end{tabular}
+	}
+	\end{center}
+	\caption{Desviación estándar de cada clasificador, según el
+	preprocesamiento y descomposición aplicada, clasificando en Objetivo o Subjetivo.\label{tabDes}}
+	\end{table}
+	
+	
+% 	\begin{table}[htb]
+% 	\begin{center}
+% 	\small{
+% 	\begin{tabular}{c c c c c c c c}
+% 	\hline
+% 	Preprocesamiento & KNN & $SVM_L$ & $SVM_{RBF}$ & DT & RF & NB \\
+% 	\hline
+% 	Simple & 0.66 & 0.71 & 0.57 & 0.71 & 0.57 & 0.60 \\
+% 	Etiquetas & 0.58 & 0.66 & 0.57 & 0.60 & 0.57 & 0.59 \\
+% 	Emoticones & 0.65 & 0.70 & 0.57 & 0.70 & 0.57 & 0.60 \\
+% 	Jerga & 0.66 & 0.70 & 0.57 & 0.71 & 0.57 & 0.60 \\
+% 	Letras repetidas & 0.66 & 0.71 & 0.57 & 0.70 & 0.57 & 0.59 \\
+% 	Stop words & 0.65 & 0.70 & 0.57 & 0.71 & 0.57 & 0.59 \\
+% 	Corrección & 0.65 & 0.71 & 0.57 & 0.70 & 0.57 & 0.60 \\
+% 	Stemming & 0.66 & 0.71 & 0.57 & 0.71 & 0.57 & 0.60 \\
+% 	Todas & 0.58 & 0.58 & 0.57 & 0.57 & 0.57 & 0.58 \\ 
+% 	\end{tabular}
+% 	}
+% 	\end{center}
+% 	\caption{Precisión de cada clasificador, según el
+% 	preprocesamiento aplicado, clasificando en Objetivo o Subjetivo.\label{tabProm}}
+% 	\end{table}
+% 	
+% 	\begin{table}[htb]
+% 	\begin{center}
+% 	\small{
+% 	\begin{tabular}{c c c c c c c c}
+% 	\hline
+% 	Preprocesamiento & KNN & $SVM_L$ & $SVM_{RBF}$ & DT & RF & NB \\
+% 	\hline
+% 	Simple & 0.03 & 0.02 & 0.01 & 0.01 & 0.01 & 0.01 \\
+% 	Etiquetas & 0.02 & 0.02 & 0.02 & 0.02 & 0.02 & 0.02 \\
+% 	Emoticones & 0.03 & 0.02 & 0.01 & 0.02 & 0.01 & 0.02 \\
+% 	Jerga & 0.02 & 0.02 & 0.02 & 0.02 & 0.02 & 0.02 \\
+% 	Letras repetidas & 0.02 & 0.02 & 0.02 & 0.02 & 0.02 & 0.02 \\
+% 	Stop words & 0.04 & 0.02 & 0.02 & 0.02 & 0.02 & 0.01 \\
+% 	Corrección & 0.02 & 0.02 & 0.02 & 0.02 & 0.02 & 0.01  \\
+% 	Stemming & 0.02 & 0.01 & 0.01 & 0.01 & 0.01 & 0.02 \\
+% 	Todas & 0.02 & 0.01 & 0.01 & 0.02 & 0.01 & 0.02 \\ 
+% 	\end{tabular}
+% 	}
+% 	\end{center}
+% 	\caption{Desviación estándar de cada clasificador, según el 
+% 	preprocesamiento aplicado, clasificando en Objetivo o Subjetivo.\label{tabDes}}
+% 	\end{table}
+	
+	Analizando los resultados de esta primera etapa se pudo observar que el mejor clasificador es 
+	\emph{Ridge}, seguido de
+	\emph{Rocchio}. En cada caso se alcanzó una una 
+	precisión del $72\%$ y $71\%$ 
+	respectivamente. No se muestran diferencias en los resultados al normalizar los datos o  no hacerlo.
+	Las fluctuaciones en los resultados creadas por los algoritmos para reducir las dimensiones,
+	solo afectaron a \emph{Support Vector Machine} con kernel Lineal, al que ICA parece
+	perjudicar. 
+	
+\subsection{Clasificación Positivo-Negativo-Neutro}\label{PNN}
+	
+	En la segunda etapa, los \emph{tweets} subjetivos del corpus original,
+	se clasificaron en las categorías 
+	de positivo, negativo y neutro~(PNN). 
+	Se realizaron 30 corridas con 6 clasificadores, 2 tipos de preprocesamiento y 
+	2 algoritmos de descomposición, utilizando los algoritmos seleccionados
+	en la comparación inicial.
+	Para evaluar la calidad de la solución se utilizó la validación cruzada
+	con un $60\%$ del corpus 
+	para entrenar y un $40\%$ para validar.
+	En la tabla~\ref{tabProm2} se ve la
+	precisión de esta clasificación y en la tabla~\ref{tabDes2} se ve la
+	desviación estándar. 
+	
+	Analizando los resultados de esta segunda etapa se pudo observar que el mejor clasificador es 
+	\emph{Ridge}, seguido de
+	\emph{Rocchio} y \emph{Linear Support Vector Machine}. En cada caso se alcanzó una una 
+	precisión del $49\%$, $49\%$ y $47\%$ 
+	respectivamente. No se muestran diferencias en los resultados al normalizar los datos o  no hacerlo.
+	Tampoco son significativas las fluctuaciones en los resultados al 
+	utilizar diferentes algoritmos para reducir las dimensiones. 
+	
+% 	\small{
+% 	\begin{table}[htb]
+% 	\begin{center}
+% 	\small{
+% 	\begin{tabular}{c c c c c c c c}
+% 	\hline
+% 	Preprocesamiento & KNN & $SVM_L$ & $SVM_{RBF}$ & DT & RF & NB \\
+% 	\hline
+% 	Simple & 0.44 & 0.48 & 0.46 & 0.49 & 0.46 & 0.41\\
+% 	Etiquetas & 0.46 & 0.48 & 0.46 & 0.49 & 0.46 & 0.39\\
+% 	Emoticones & 0.44 & 0.48 & 0.46 & 0.48 & 0.46 & 0.40\\
+% 	Jerga & 0.43 & 0.48 & 0.46 & 0.48 & 0.46 & 0.41\\
+% 	Letras repetidas & 0.44 & 0.48 & 0.46 & 0.48 & 0.46 & 0.41\\
+% 	Stop words & 0.38 & 0.47 & 0.46 & 0.50 & 0.46 & 0.41\\
+% 	Corrección & 0.44 & 0.48 & 0.46 & 0.49 & 0.47 & 0.40\\
+% 	Stemming & 0.45 & 0.48 & 0.46 & 0.48 & 0.46 & 0.40\\
+% 	Todas & 0.45 & 0.48 & 0.46 & 0.50 & 0.46 & 0.38\\
+% 	\end{tabular}
+% 	}
+% 	\end{center}
+% 	\caption{Precisión de cada clasificador, según el
+% 	preprocesamiento aplicado, clasificando en Positivo, Negativo o Neutro.\label{tabProm2}}
+% 	\end{table}
+% 	}
+% 	
+% 	\begin{table}[htb]
+% 	\begin{center}
+% 	\small{
+% 	\begin{tabular}{c c c c c c c c}
+% 	\hline
+% 	Preprocesamiento & KNN & $SVM_L$ & $SVM_{RBF}$ & DT & RF & NB \\
+% 	\hline
+% 	Simple & 0.03 & 0.02 & 0.02 & 0.02 & 0.02 & 0.03\\
+% 	Etiquetas & 0.02 & 0.02 & 0.02 & 0.02 & 0.02 & 0.02\\
+% 	Emoticones & 0.02 & 0.03 & 0.02 & 0.02 & 0.02 & 0.02\\
+% 	Jerga & 0.03 & 0.02 & 0.02 & 0.02 & 0.02 & 0.02\\
+% 	Letras repetidas & 0.03 & 0.02 & 0.02 & 0.03 & 0.02 & 0.02\\
+% 	Stop words & 0.05 & 0.02 & 0.02 & 0.02 & 0.02 & 0.02\\
+% 	Corrección & 0.02 & 0.02 & 0.02 & 0.02 & 0.02 & 0.02\\
+% 	Stemming & 0.02 & 0.02 & 0.02 & 0.02 & 0.02 & 0.02\\
+% 	Todas & 0.05 & 0.03 & 0.02 & 0.02 & 0.02 & 0.02\\ 
+% 	\end{tabular}
+% 	}
+% 	\end{center}
+% 	\caption{Desviación estándar de cada clasificador, según el 
+% 	preprocesamiento aplicado, clasificando en Positivo, Negativo o Neutro.\label{tabDes2}}
+% 	\end{table}
+	
+	
+	
+	\begin{table}[htb]
+	\begin{center}
+	\small{
+	\begin{tabular}{l c c c c c c}
+	\hline
+	& Ridge & Perceptron & Rocchio & $SMV_L$ & Pas-Agg & DTree \\
+	\hline
+	Simple + PCA & 49\% & 45\% & 47\% & 47\% & 43\% & 42\% \\
+	Simple + ICA & 49\% & 42\% & 47\% & 46\% & 47\% & 45\% \\
+	Clean + PCA & 49\% & 43\% & 49\% & 47\% & 44\% & 43\% \\
+	Clean + ICA & 49\% & 43\% & 46\% & 47\% & 45\% & 44\% \\
+	\end{tabular}
+	}
+	\end{center}
+	\caption{Precisión de cada clasificador, según el 
+	preprocesamiento y la descomposición aplicada, clasificando 
+	en Positivo, Negativo o Neutro.\label{tabProm2}}
+	\end{table}
+	
+	\begin{table}[htb]
+	\begin{center}
+	\small{
+	\begin{tabular}{l c c c c c c}
+	\hline
+	& Ridge & Perceptron & Rocchio & $SMV_L$ & Pas-Agg & DTree \\
+	\hline
+	Simple + PCA & 2.24\% & 3.16\% & 2.65\% & 2.65\% & 4.47\% & 3.16\% \\
+	Simple + ICA & 1.73\% & 6.32\% & 2.45\% & 2.24\% & 3.16\% & 3.16\% \\
+	Clean + PCA & 2.45\% & 2.45\% & 3.16\% & 2.24\% & 3.16\% & 2.83\% \\
+	Clean + ICA & 2.00\% & 5.48\% & 3.00\% & 1.73\% & 3.16\% & 3.16\% \\
+	\end{tabular}
+	}
+	\end{center}
+	\caption{Desviación estándar de cada clasificador, según el 
+	preprocesamiento y la descomposición aplicada, clasificando 
+	en Positivo, Negativo o Neutro.\label{tabDes2}}
+	\end{table}
+	
+\subsection{Clasificación General}
+	
+	La propuesta general se crea a partir de los 
+	mejores resultados en las secciones \ref{OS} y \ref{PNN}.
+	Este experimento abarca las dos etapas de clasificación, 
+	recibiendo como entrada los \emph{tweets} y devolviendo 
+	su clasificación en objetivo, positivo, negativo o neutro.
+	El preprocesamiento utilizado es el simple, ya que es más
+	eficiente y da resultados similares al resto.
+	Para reducir las dimensiones se propone PCA, ya que ICA
+	afecta el funcionamiento de algunos clasificadores.
+	
+	Para evaluar la calidad de la solución se utilizó la validación cruzada
+	con un $60\%$ del corpus 
+	para entrenar y un $40\%$ para validar.
+	En la tabla~\ref{tabProm3} se ve la
+	precisión de esta clasificación y en la tabla~\ref{tabDes3} se ve la
+	desviación estándar. 
+	
+	\begin{table}[htb]
+	\begin{center}
+	\small{
+	\begin{tabular}{l c c }
+	\hline
+	PNN $\backslash$ OS& Rocchio & Ridge \\
+	\hline
+	Rocchio & 47\% & 48\% \\ 
+	Ridge & 51\% & 51\% \\
+	$SVM_L$ & 47\% & 49\%
+	\end{tabular}
+	}
+	\end{center}
+	\caption{Precisión de cada combinación de clasificadores, 
+	para la clasificación general.\label{tabProm3}}
+	\end{table}
+	
+	\begin{table}[htb]
+	\begin{center}
+	\small{
+	\begin{tabular}{l c c }
+	\hline
+	PNN $\backslash$ OS & Rocchio & Ridge \\
+	\hline
+	Rocchio & 2.1\% & 1.9\% \\ 
+	Ridge & 1.7\% & 1.2\% \\
+	$SVM_L$ & 2.1\% & 2.0\% 
+	\end{tabular}
+	}
+	\end{center}
+	\caption{ Desviación estándar de cada combinación de clasificadores, 
+	para la clasificación general.\label{tabDes3}}
+	\end{table}
+	
+	
+\section*{Conclusiones}
+
+	A partir de los resultados anteriores se propone
+	la siguiente metodología para el proceso de 
+	minería de opinión:
+	
+	\begin{description}
+	 \item[Preprocesamiento: ] simple.
+	 \item[Reducción de dimensiones:] Principal Component Analysis~(PCA).
+	 \item[Clasificación objetivo-subjetivo:] Rocchio o Ridge. 
+	 \item[Clasificación positivo-negativo-neutro:] Ridge.
+	\end{description}

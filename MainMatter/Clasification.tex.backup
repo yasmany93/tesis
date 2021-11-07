@@ -1,0 +1,238 @@
+\chapter{Preprocesamiento}
+\label{chap:clas}
+
+	La clasificación de los mensajes se divide en dos etapas:
+	
+	\begin{itemize}
+	\item Determinar si el mensaje es objetivo o subjetivo.
+	\item Clasificar los mensajes subjetivos en positivos o negativos.
+	\end{itemize}
+	
+	Se propone la experimentación con los mismos clasificadores en las dos
+	etapas, ya que ambas enfrentan el mismo problema teórico.
+
+	El aprendizaje supervisado parece una alternativa natural para enfrentar este
+	problema, ya que se desea asignar a cada mensaje una clasificación única.
+	El conjunto de entrenamiento se construye a partir de la clasificación
+	manual por parte de especialistas (en este caso los autores) de una lista
+	de \emph{tweets} extraídos del sitio de \emph{Twitter} empleando herramientas
+	desarrolladas en la facultad para este propósito. Es necesario notar que 
+	incluso la tarea de clasificación manual es difícil, debido a la ambigüedad
+	inherente a estos mensajes. Por este motivo se ha escogido~(intentado confeccionar
+	un conjunto de entrenamiento seleccionando) los mensajes que para un humano
+	tienen una orientación bien definida, obviando los mensajes donde los clasificadores
+	humanos estuvieron en desacuerdo.
+	
+	Los clasificadores empleados reciben un conjunto de entrenamiento en 
+	la etapa de aprendizaje, que en este caso es obtenido a partir de un archivo de
+	texto con una entrada por línea de la forma
+	\verb|MENSAJE ====> CLASE|, donde la clase asignada es \verb|OBJETIVO|,
+	\verb|NEGATIVO| o \verb|POSITIVO|.
+	
+	\section{Clasificador \emph{Naive Bayes}}
+	
+		El clasificador \emph{Naive Bayes} es un clasificador bayesiano
+		simple que asume independencia entre las características (palabras) \cite{Mitchell1997MachineLearning}.
+		La fase de entrenamiento consiste en computar para cada
+		característica la cantidad de veces que es observada en cada clase,
+		y de esta forma aproximar la probabilidad de que dicha característica
+		indique la clase correspondiente. Formalmente, se calcula la probabilidad
+		de que un elemento $w$ pertenezca a una clase $C_i$ como:
+		
+		$$
+		P(C_i | w) = P(C_i | a_1 \dots a_n)
+		$$		
+		donde $w = <a_1, \ldots, a_n>$ es la representación en características
+		del elemento $w$. En nuestro caso $a_i$ son los términos (palabras) extraídos
+		del mensaje después del preprocesamiento. Aplicando el teorema de Bayes se obtiene:
+		
+		$$
+		P(C_j | a_1, \ldots, a_n) = \frac{P(a_1, \ldots, a_n | C_j) \cdot P(C_j)}{P(a_1, \ldots, a_n)}
+		$$
+			
+		Además, como se desea maximizar $P(C_j | a_1, \ldots, a_n)$, se elimina 
+		el denominador común $\prod P(a_i)$.				
+		El valor $P(C_j)$ se puede aproximar contando la cantidad de veces que la clase
+		$C_j$ es observada en el conjunto de entrenamiento. El valor $P(a_1, \ldots, a_n | C_i)$
+		se puede aproximar de forma eficiente asumiendo independencia
+		entre las características. Reescribiendo la fórmula dada la 
+		condición de independencia entre $I(a_i, a_j) \forall i \neq j$, 
+		se obtiene:
+		
+		$$
+		P(C_i | a_1, \ldots, a_n) \simeq P(C_i) \cdot \prod P(a_i | C_i) 
+		$$
+		
+		Esta condición es bastante fuerte, pues es común
+		encontrar n-gramas cuya semántica es diferente de la provista por cada característica
+		por separado si uno de los términos actúa como modificador. Puede suceder
+		que el modificador acentúe el valor semántico del resto de los términos, como en
+		las palabras \verb|mucho| o \verb|poco|, pero el caso más preocupante
+		es cuando el modificador cambia el valor semántico, como sucede en la negación.
+		Asumiendo independencia entre términos un clasificador nunca podrá
+		reconocer el valor semántico de la frase \verb|no me gusta|. 
+	    
+		El valor de $P(a_i | C_i)$
+		se aproxima contando la cantidad de veces que el término $a_i$ es observado
+		en un mensaje clasificado en la clase $C_i$. Estos valores se pueden calcular
+		para todo el conjunto de entrenamiento de forma eficiente en una sola iteración.
+		El proceso de clasificación consiste en calcular los productos correspondientes,
+		y tiene complejidad $O(|w|)$ para cada mensaje $w$. La clase asignada
+		es aquella que maximice el valor $P(C_i | w)$ \cite{Bayes}.
+		
+		El empleo de un conjunto de entrenamiento pequeño puede provocar que el 
+		producto $\prod P(a_i | C_i)$ se anule debido a que uno
+		de los términos $a_i$ no aparece en ninguno de los ejemplos entrenantes. Esto
+		provocaría que se anule el valor de $P(C_i | w)$ para alguna clase $C_i$ de forma
+		incorrecta, incluso aunque el resto de los términos aparezcan en la mayoría
+		de los casos en la clase $C_i$, se indefina el denominador de la
+		fórmula, o se obtenga un valor sesgado.
+		
+		Este fenómeno se puede evitar modificando la forma en que se calcula estos valores,
+		añadiendo un sesgo con el valor de una probabilidad definida \emph{a priori}.
+		La fórmula modificada para el cálculo de $P(a_i | C_j)$ es:
+
+		$$
+		P(a_i | C_j) \simeq \frac{N_{ij} + mp}{N_{i.} + m}
+		$$		
+		donde $N_{ij}$ es la cantidad de veces que la característica $a_i$ fue
+		observada en la clase $C_j$, $N_{i.}$ es la misma cantidad para todas
+		las clases, $p$ es la probabilidad \emph{a priori} de encontrarse
+		la característica $a_i$, y $m$ es un valor de escalado que pondera
+		el peso que se le otorga al sesgo. Es común en aplicaciones de detección
+		de texto asumir $p \sim U(0,1)$ y emplear $m = |\mathrm{Vocabulario}|$
+		\cite{Mitchell1997MachineLearning}, de forma
+		que la probabilidad de que encontrarse la palabra $a_i$ es uniforme
+		en todo el vocabulario, y la fórmula final queda:
+		
+		$$
+		P(a_i | C_j) \simeq \frac{N_{ij} + 1}{N_{i.} + |\mathrm{Vocabulario}|}
+		$$
+		
+		El cálculo del valor $\prod P(a_i | C_j)$ puede producir \emph{underflow}
+		si se multiplican un número considerable de valores pequeños. Una modificación
+		común es aplicar la función $\log$ a toda la fórmula, convirtiendo las
+		multiplicaciones en sumas. Dado que esta función es creciente, el 
+		argumento que maximice la expresión original también maximiza la nueva
+		expresión. Con esta modificación la expresión final para el cálculo
+		de la clase más probable es:
+		
+		$$
+		C_* = \mathrm{arg} \max_j \left\{ \log \left( \frac{N_{.j}}{|\mathrm{Cjto Entrenante}|} \right) +  \sum_i \log\left( \frac{N_{ij} + 1}{N_{i.} + |\mathrm{Vocabulario}|} \right) \right\}
+		$$
+		
+	\section{Árboles de Decisión}
+	
+		Los árboles de decisión son clasificadores que aproximan una función de clasificación
+		a partir de la ejecución de un conjunto de pruebas sobre los valores asociados
+		a atributos que se pueden extraer del elemento a clasificar \cite{Russell1995}.
+		Se implementó el algoritmo de aprendizaje ID3 para la construcción de árboles de decisión.
+		Este algoritmo genera de forma iterativa un árbol de decisión, eligiendo
+		en cada nodo el atributo que maximiza la cantidad de información obtenida
+		sobre el conjunto de entrenamiento. Formalmente, se escoge el atributo $A$ que
+		maximice la ganancia de información sobre el conjunto de entrenamiento $E$:
+		
+		$$
+		G(E,A) = H(E) - \sum_{V_i \in A} \frac{|E_i|}{|E|} \cdot H(E_i)
+		$$
+		donde $E_i$ es el subconjunto de ejemplos donde le atributo $A$ toma
+		el valor $v_i$.
+		
+		La medida $H(E)$ es la entropía del conjunto $E$, que se calcula en función
+		de la probabilidad de observar en $E$ cada posible clase $C_i$:
+		
+		$$
+		H(E) = - \sum_i p_i \cdot \log_2(p_i) = - \sum_i \frac{|E_i|}{|E|} \cdot \log_2{\frac{|E_i|}{|E|}}
+		$$
+		donde $E_i$ es el subconjunto de ejemplos clasificados en la clase $C_i$. 
+		
+		La entrada del algoritmo recibe vectores de palabras, por lo que los valores de 
+		sus componentes no tienen valores discretos con los que crear el árbol.
+		Una manera muy intuitiva sería utilizar como atributo la aparición de 
+		cada palabra, pero esta variante genera una enorme cantidad de atributos,
+		que no aparecen en la mayoría de los elementos a clasificar.
+		Por lo tanto se propone una variante que extrae características que 
+		influyen en la clasificación del mensaje, como puede ser la presencia
+		de los siguientes elementos:
+		
+		\begin{itemize}
+			\item Signos de exclamación.
+			\item Signos de interrogación.
+			\item Emoticones.
+			\item Adjetivos.
+			\item Sustantivos.
+			\item Verbo \verb|ser| o \verb|estar|.
+			\item Si y No.
+			\item Palabras relevantes definidas \emph{a priori}.
+		\end{itemize}
+		
+	\section{Clasificador de \emph{Rocchio}}
+	
+		El clasificador de \emph{Rocchio} se basa en aplicar el algoritmo de clasificación
+		\emph{k-nearest-neighboors} (KNN) utilizando como indicadores los centroides obtenidos
+		del algoritmo \emph{$k$-means} u otro método de agrupamiento, etiquetados según
+		la clase mayoritaria de cada grupo, o por algún tipo de voto ponderado \cite{Manning2008}.
+		
+		El funcionamiento del algoritmo KNN radica en asignar la clase a un nuevo ejemplo
+		basado en las observaciones de las clases de sus vecinos más cercanos. Es necesario
+		contar con una representación de los datos en un espacio métrico y con una
+		definición de distancia que aproxime de cierta forma la topología del espacio
+		original. Para la recuperación de información sobre lenguaje natural es común 
+		representar los documentos (en este caso mensajes) como vectores de pesos sobre
+		los términos que contienen. 
+		
+		El modelo vectorial clásico asigna pesos según la
+		fórmula $t_f \cdot id_f$. Debido a que los documentos analizados en este caso
+		son de una longitud muy corta, el término $t_f$ cobra poca importancia. Así mismo,
+		el término $id_f$ se añade para quitar importancia a los términos más comunes
+		durante la detección de tópico. Sin embargo, palabras muy comunes pueden tener
+		un valor de opinión importante que no es deseable menospreciar. Por este motivo
+		se sugiere adoptar una representación binaria (vectores del espacio $[0,1]^N$)
+		para los documentos de entrada,
+		donde se tiene en cuenta exclusivamente la aparición o no de un término. Esta
+		representación tiene la ventaja agregada de producir vectores muy esparcidos,
+		algo deseable en un espacio de dimensión tan grande como la cantidad de términos
+		de un idioma, que es un número considerable incluso después del \emph{stemming}.
+		
+		Por otro lado, posterior a la aplicación del
+		algoritmo \emph{$k$-means}, los centroides encontrados generalmente deben
+		tener valores continuos en sus componentes, debido al cálculo del promedio de los
+		vectores binarios. En la implementación se presta especial atención al hecho
+		de que los vectores son muy esparcidos, por lo que las operaciones aritméticas
+		se pueden realizar de forma mucho más eficiente que en una implementación 
+		ingenua. Esta representación puede ser extendida con técnicas de detección
+		de correlación apareciendo así términos con valores continuos en el intervalo $[0,1]$ y
+		reducción de rango (e.g. LSI), pero es posible perder la ventaja de la eficiencia
+		de las operaciones en vectores esparcidos. 		
+
+		La medida de similitud adoptada es el producto escalar entre vectores.
+		Para el caso de vectores binarios el producto escalar se reduce a contar la
+		cantidad de términos comunes. Aún al aparecer vectores no binarios (centroides), teniendo
+		en cuenta que nunca se comparan dos centroides entre sí, sino solo centroides
+		con ejemplos de entrada, la implementación de las operaciones aritméticas
+		se puede lograr de forma eficiente si se analizan solamente las componentes
+		distintas de cero en los vectores binarios.
+		
+		La selección de los centroides se realiza mediante la aplicación de una
+		implementación estándar del algoritmo \emph{$k$-means}. Una vez determinados
+		los centroides, se les asigna una distribución de probabilidades para cada
+		clase, según los elementos del conjunto de entrenamiento asociados al
+		centroide correspondiente. Esta decisión se toma en vistas de que el agrupamiento
+		puede generar una alta varianza en las clases de sus elementos.
+		Para determinar la clasificación de un nuevo elemento, se buscan los $N$ centroides
+		más cercanos y se realiza un voto ponderado por cada centroides sobre todas
+		las clases, donde el peso de cada centroide en cada clase está determinado por
+		la cantidad de elementos asociados a dicho centroide que pertenecen a la clase correspondiente.
+
+		En pos de la experimentación se implementan variantes del mecanismo de votación 
+		que permiten personalizar las siguientes opciones:
+		
+		\begin{itemize}
+		 \item Cada centroide vota por todas las clases, o solo por la clase de mayor peso.
+		 \item El voto de cada centroide se pondera por la distancia relativa del elemento
+		       al centroide en correspondencia con la distancia del elemento al resto de los
+		       centroides.
+		 \item El voto de cada centroide se pondera por la cantidad de elementos del conjunto
+		       de entrenamiento asociados al centroide en correspondencia con el tamaño
+		       del conjunto de entrenamiento.
+		\end{itemize}

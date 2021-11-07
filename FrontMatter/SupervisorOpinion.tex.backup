@@ -1,0 +1,54 @@
+\begin{opinion}
+Twitter es en la actualidad uno de las grandes protagonistas de la red de hoy. Esta plataforma
+de microblogging ha establecido a puro uso su modelo de comunicación. Entonces Twitter se ha convertido
+en una plataforma esencial para el seguimiento, difusión y coordinación de muchos eventos de diferente
+naturaleza e importancia como pueden ser una campaña presidencial o la actual \texttt{\#SpanishRevolution}.
+Es precisamente este escenario el que se presenta como un nuevo campo de batalla por la dominación
+de la información. 
+
+Una arista fundamental en este proceso es poder determinar la influencia de
+los usuarios. A este punto vital no han estado ajenos ni la academia ni los desarrolladores, existiendo
+ya diferentes soluciones que permiten obtener una medida de la influencia de los usuarios. Sin 
+embargo, la amplia mayoría de estas propuestas pasa por cuantificar la influencia de los usuarios
+sin existir todavía un consenso en cómo se debe realizar este proceso de cuantificación.
+
+Este fue el reto asumido por el estudiante Ariel Hernández Amador, proponer una alternativa
+que permitiera clasificar a los usuarios de acuerdo a su influencia sin establecer una medida
+cuantificada de la misma. Con este fin Ariel tuvo que adentrarse en la dinámica de Twitter y estudiar
+el conjunto de estrategias y aplicaciones existentes que permiten estimar la influencia de los 
+usuarios. Así, en esta exploración inicial, surgió la idea de establecer una clasificación de los usuarios
+determinando los grupos de influencia a los cuales pertenecen estos, siendo esta la idea esencial que marcó 
+la investigación.
+
+Desde estos primeros pasos el estudiante mostró un gran entusiasmo en la investigación que desarrolló
+traduciendo este entusiasmo en empeño y seriedad. Así se enfrentó a todo el proceso de investigación en 
+el cual tuvo que consultar una amplia literatura científica analizando las ventajas y desventajas de
+cada una de estas propuestas. Este análisis le permitió luego formular la propuesta definitiva que presenta 
+esta investigación donde se propone determinar la influencia de los usuarios en Twitter a partir de su pertenencia
+a grupos de influencia determinando estos mediante técnicas de agrupamiento. Para ello tuvo que
+utilizar adecuadamente los conocimientos de varias áreas de la computación aprendidos durante la carrera 
+y otros que fue necesario adquirir por la naturaleza propia de la investigación, mostrando además una gran
+creatividad y capacidad de polemizar en la búsqueda de soluciones interesantes ante las distintas dificultades
+surgidas durante la investigación. 
+
+De esta forma, como resultado de la investigación, se pudo presentar la nueva estrategia de estimación de
+la influencia de los usuarios de Twitter siendo esta validada por procedimientos empíricos. Estos
+experimentos también permitieron presentar una metodología , con parámetros y algoritmos concretos, que 
+permite la implementación de la estrategia presentada. Finalmente, y como prueba de concepto, se implementó
+una aplicación que llevó a la práctica la estrategia propuesta.
+
+Todo este trabajo se encuentra reflejado en el informe escrito donde se presentan los detalles de la investigación.
+En su redacción el estudiante mostró un buen dominio del idioma y excelentes habilidades a la hora de transmitir ideas 
+complejas utilizando de manera adecuada gráficas, tablas y diagramas que, en correspondencia con el texto, describen
+el proceso de investigación y los resultados obtenidos.
+
+A los resultados obtenidos en la investigación se suma que Ariel ha sido durante estos años de carrera un estudiante
+con excelentes resultados docentes y siempre vinculado a las investigaciones que se realizan en la facultad. Siendo
+entonces esta investigación el colofón a un desempeño que he seguido desde un año antes que ingresara en la facultad
+y que he tenido el placer de acompañar y verlo culminar a lo largo de estos años. Así, por todos estos motivos, solicito
+para el estudiante Ariel Hernández Amador la calificación de Excelente~(5 puntos) para que de esta
+manera concluya sus estudios obteniendo el título de Licenciado en Ciencia de la Computación e integre, por derecho
+propio, el gremio de profesionales de la computación.
+\vskip 1.0cm
+Lic Yudivián Almeida Cruz.
+\end{opinion}

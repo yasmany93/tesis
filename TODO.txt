@@ -1,0 +1,14 @@
+Bibliografia:
+	Buscar el artículo de Gartner
+	Dudas en gobernanza de datos.
+Estado de arte:
+	Como pongo la parte de optimización de consultas.
+Clientes:
+	Definir bien los clientes en Datys.
+QueryBuilder:
+	Que más le agrego?.
+Resultados:
+	Agregar más cosas en la parte del software
+	Recomendaciones:
+	Profundizar más en esto.
+	Explicar las razones de dichas recomendaciones de crear un formato propio de consultas.

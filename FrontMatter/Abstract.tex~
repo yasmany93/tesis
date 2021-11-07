@@ -1,0 +1,13 @@
+\begin{abstract}
+Twitter es hoy una plataforma de información dinámica 
+y actualizada, donde se expresan gran
+cantidad de opiniones. En esta tesis se propone 
+una metodología completa para desarrollar un proceso de
+Minería de Opinión sobre esta red social. En el trabajo se 
+describen distintas propuestas para realizar
+la normalización de los datos, reducir las dimensiones del
+problema y clasificar los mensajes de texto. Se presenta 
+una comparación entre los resultados obtenidos con diferentes 
+algoritmos y una propuesta final a partir de los mejores resultados.
+
+\end{abstract}

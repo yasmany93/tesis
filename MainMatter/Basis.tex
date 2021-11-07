@@ -1,0 +1,439 @@
+\chapter{Estado del Arte}
+\label{chap:basis}
+
+\section{Gestión de redes}
+\label{sec:network_management}
+ Las redes de computadoras han evolucionado con el paso del tiempo ante la
+necesidad de satisfacer las demandas de los diferentes servicios de
+telecomunicaciones. Es por esto que cada día se requiere un mayor ancho de banda
+y una mejor calidad del servicio para las nuevas aplicaciones que se han venido
+desarrollando hasta la actualidad. La tecnología de las redes ha incrementado su
+complejidad generándose la necesidad de contar con una mejor administración de
+sus recursos, lo cual ha favorecido la evolución conjunta de la gestión de
+redes. 
+
+Según la perspectiva del usuario, la gestión de redes tiene diferentes
+significados. Para algunos podría consistir simplemente en tener a un
+especialista monitorizando los servicios o protocolos desactualizados con el
+objetivo de mantenerlos actualizados. Para otros, involucra una base de datos
+distribuida y estaciones finales que generan en tiempo real gráficos de los
+cambios de la topología de la red y el tráfico. En resumen, se puede decir que
+es un mecanismo que emplea una variedad de herramientas, aplicaciones y
+dispositivos con el objetivo de asistir a sus administradores en la
+monitorización y el mantenimiento de la red.
+
+Una definición puede ser la siguiente\cite{Saydam1996}:
+\begin{quotation}
+ \emph{``La gestión de redes incluye el despliegue, integración y coordinación
+del hardware, software y los elementos humanos para monitorizar, probar,
+sondear, configurar, analizar, evaluar y controlar los recursos de la red para
+conseguir los requerimientos de tiempo real, desempeño operacional y calidad de
+servicio a un precio razonable.''}
+\end{quotation}
+
+Adicionalmente, al reducir lo tiempos de inactividad y minimizar los efectos de
+las interrupciones, la gestión mantiene en buen estado la red, aumentando el
+nivel de satisfacción de los usuarios que en definitiva son quienes trabajan en
+las computadoras para utilizar los servicios ofrecidos.
+
+En respuesta a la expansión de las redes y al rápido crecimiento de Internet,
+diversas organizaciones internacionales han desarrollado iniciativas para la
+gestión automatizada de los recursos de la red que luego se han convertido en
+normas\cite{Exposito2003}. Cada una de estas normas describe una arquitectura
+con ciertas características, pero en general, todas incluyen estaciones finales
+(los elementos a ser gestionados, como computadoras y dispositivos de red) con
+un \textit{software} incorporado que les permite alertar a las entidades de
+gestión o nodos gestores de la existencia de algún problema. Por su parte, estas
+pueden realizar encuestas a las estaciones finales y así analizar ciertos
+valores previamente almacenados en estas. Esto se conoce como el paradigma
+gestor-agente. %TODO: Poner ref a este paradigma
+
+Las encuestas realizadas por las entidades de gestión pueden ser automáticas o
+iniciadas por el usuario y los agentes en los dispositivos gestionados responden
+a todas. Los agentes son módulos de \textit{software} que primero compilan
+información acerca de los dispositivos gestionados en los cuales ellos residen.
+Luego, almacenan esta información en base de datos y finalmente la proveen de
+forma proactiva o reactiva a los nodos gestores a través de protocolos de
+gestión. Existe un variado número de protocolos que tienen como objetivo el
+soporte de la red y la gestión de los dispositivos que a ella pertenecen. Estos
+protocolos incluyen a SNMP\cite{Hardaker2011} y a RMON\cite{Fenner2005}.
+
+Usualmente en su funcionamiento una plataforma para la gestión de la red recibe
+y procesa eventos de los elementos de red que la conforman. Aunque los
+servidores y los demás recursos que la componen también pueden enviar eventos a
+dicha plataforma. Generalmente estas cuentan con las siguientes funcionalidades:
+\begin{itemize}
+ \item Descubrimiento o reconocimiento de la red.
+ \item Reconocimiento de los elementos de la red.
+ \item Manejador o gestor de eventos.
+ \item Desarrollo de un recolector de datos y un graficador de la red.
+ \item Navegador de la gestión de datos.
+\end{itemize}
+
+En consecuencia las plataformas para la gestión de la red pueden ser vistas como
+la aplicación principal para las operaciones en la detección de fallas en
+la infraestructura de las redes. Algunas de las aplicaciones existentes en este ámbito tan
+sólo presentan a los administradores un gráfico de la topología de la red, donde
+se puede apreciar el estado de cada una de sus componentes. 
+
+Las tareas asociadas al proceso de gestión de red fueron formalmente
+especificadas por la organización conocida como Interconexión de Sistemas
+Abiertos (OSI)\footnote{Por sus siglas en inglés, \textit{Open Systems
+Interconnection}} de la Organización Internacional para la Estandarización 
+(ISO)\footnote{Por sus siglas en inglés: \textit{International Organization for
+Standardization}. \\ \url{http://www.iso.org/}}, con lo cual se puede esperar
+interoperabilidad entre los sistemas de gestión que cumplan con dicha
+especificación. La ISO definió cinco áreas funcionales o disciplinas dentro de
+la gestión de red. Estas son:
+
+\textbf{Gestión de la configuración} Sus tareas fundamentales son: la
+recolección de datos sobre el estado de la red, su utilización para actuar sobre
+la configuración de los recursos gestionados y el almacenamiento de los datos
+sobre la configuración de la red (base de datos utilizada por el resto de las
+áreas funcionales). Puede ser considerada como el área funcional más importante
+pues las tareas asociadas a las otras cuatro áreas se basan, en mayor o menor
+medida, en datos recogidos y mantenidos por este tipo de gestión. %TODO: Poner ref a 10 y 3 de idis
+
+\textbf{Gestión de prestación o comportamiento} Su objetivo principal es el
+mantenimiento del nivel de servicio que la red ofrece para lograr su
+operabilidad en todo momento. Tiene mucho que ver con el tráfico existente en la
+red. Permite además conocer de qué forma se emplean los recursos, con lo cual se
+tienen elementos de juicio para la futura evolución de la red y saber qué tipo
+de inversiones son las más adecuadas. %TODO: Poner ref a 10 y 12 de idis
+
+\textbf{Gestión de fallos} Su objetivo principal es la localización y solución
+de los problemas que presente la red, ofreciendo un soporte preventivo y
+correctivo a su funcionamiento. Permite, en muchas ocasiones, detectar y
+subsanar los problemas antes de que se percaten los usuarios. %TODO: Poner ref a 10 y 5 de idis.
+
+\textbf{Gestión de seguridad} Es la responsable de controlar el acceso a los
+recursos de la red, de acuerdo a ciertas directivas, para que las mismas no sean
+boicoteadas de ninguna manera. La información que está en la red solo es
+accedida por el personal autorizado y en el momento deseado. %TODO: Poner ref a 10 y 17 de idis.
+
+\textbf{Gestión de la contabilidad} Conocida también como gestión de los
+recursos, se encarga de contabilizar el uso de estos para valorar el costo del
+consumo. Permite cobrar los servicio ofrecidos y amortizar con ello las
+inversiones realizadas y los costos de los ofrecidos por terceros. Ayuda además
+a tener elementos de decisión para una asignación de recursos de una manera más
+eficiente. %TODO: Poner ref a 10 y 1 de idis.
+
+Para los fines del presente trabajo, el cual se propone diseñar e implementar un
+sistema distribuido para la detección de anomalías, se profundizará en los
+sistemas de gestión de fallos, tarea en la que queda enmarcado el mismo. Como se
+aprecia anteriormente los objetivos principales en la gestión de fallos son
+detectar, almacenar, notificar y en la medida de lo posible actuar ante los
+problemas de la red, para mantener la efectividad de la misma. Debido a las
+consecuencias de la ocurrencia de un fallo en la red entre las que se pueden
+mencionar, retraso en la respuesta de los servicios o la degradación de la red;
+esta ha sido una de las áreas en las que más se ha investigado y desarrollado en
+el ámbito de la gestión de redes. Actualmente existen múltiples herramientas que
+permiten su monitorización, informando sobre los fallas ocurridas y
+posibilitando la recuperación de la misma. Posteriormente en la sección
+\ref{uhtools} se explicarán brevemente las funcionalidades ofrecidas por las
+herramientas empleadas en la UH para la gestión de la red universitaria.
+
+La gestión de fallos puede ayudar a incrementar la disponibilidad de la red,
+identificando rápidamente los fallos, y posteriormente de forma proactiva,
+iniciando el proceso de recuperación. A medida que las redes se hacían más
+distribuidas, dichos sistemas inicialmente basados en una arquitectura
+centralizada; presentaron definciencias como insuficiente escalabilidad,
+disponibilidad y flexibilidad. Obligando a su replanteamiento y la búsqueda de
+nuevas ideas para su desarrollo, evitando dichos problemas. Una solución
+aplicada, desde aquellos tiempos hasta la actualidad, es la concepción del
+sistema basándose en una arquitectura distribuida.  Luego, teniendo en cuenta
+esto, por las características de la red de la universidad y las ventajas que
+ofrecen los sistemas distribuidos; el sistema que propone el presente trabajo
+será completamente distribuido. Sobre este tipo de sistemas se profundizará en
+\ref{distributed_systems}.%TODO: Poner bibliografia de sistemas distribuidos para la gestión.
+
+\section{Herramientas y mecanismos de gestión empleados en RedUH}
+\label{uhtools}
+En la Universidad de La Habana (UH) se brindan un conjunto de servicios que son
+de vital importancia para el desarrollo científico investigativo de dicha
+institución. Luego, resulta importante que estos funcionen correctamente, por
+esta razón en este centro se utilizan varias herramientas para la gestión de la
+red. Dichas herramientas posibilitan la monitorización de la red universitaria,
+así como la recuperación ante los fallos ocurridos en la misma a lo largo del
+tiempo. 
+
+El analizador de tráfico MRTG\footnote{\url{http://oss.oetiker.ch/mrtg/}}
+(\emph{Multi Router Traffic Grapher})\cite{Prunoiu} , es una de las herramientas
+utilizadas en la gestión de la RedUH. Se utiliza para conocer el estado del
+canal de Internet, así como una historia gráfica de su comportamiento y de las
+interfaces de los encaminadores, y para monitorizar el comportamiento de las
+áreas de la UH. Esta herramienta consiste en un script que utiliza SNMP para
+estimar el volumen del tráfico que circula por las distintas interfaces de red
+de un encaminador. Para esto almacena los valores leídos a través de SNMP y
+crear gráficas para representar el tráfico en la conexión de red monitorizada.
+Estos gráficos se incluyen en páginas Web que pueden ser vistas a través de un
+navegador ordinario. Además de las vistas diarias detalladas, MRTG crea una
+representación visual del tráfico visto durante los últimos 7 días, las últimas
+5 semanas y los últimos 12 meses. Esto es posible gracias a que se almacenan las
+trazas del tráfico supervisado. MRTG no está limitado a monitorizar el tráfico
+de una interfaz de red, pues permite observar cualquier variable exportada por
+el servicio SNMP\cite{Hardaker2011}.
+
+En la red universitaria también se utiliza Icinga\footnote{\url{https://www.icinga.org/}} para su gestión. La
+configuración que se tiene actualmente permite monitorizar la conectividad de
+muchas de las áreas que la conforman y algunos servicios fundamentales. Esta
+aplicación es un sistema para el monitoreo de la red y las computadoras que
+forman parte de esta última. Originalmente fue creado como un \textit{fork} del
+sistema para el monitoreo de la red, Nagios. Icinga posee una interfaz de
+usuarios moderna basada en \textit{Web} 2.0, permite la conexión con otros
+gestores de base de datos a parte de los brindados por Nagios (entre ellos se
+pueden mencionar MySQL, Oracle y PostgreSQL) y un API lo suficientemente
+flexible para permitir la extensión de esta herramienta sin tener que realizar
+modificaciones muy complicadas en su núcleo. Además puede monitorizar los
+servicios que se brindan en una red, así como los recursos de las computadoras
+que se encuentran en esta última. También ofrece facilidades para el chequeo del
+estado de los servicios de forma paralela y la definición de manejadores de
+eventos para la resolución de problemas de forma proactiva. Esta aplicación
+brinda información visual sobre el estado de las computadoras que componen la
+red monitoreada.
+
+Para la monitorización del uso del ancho de banda de RedUH y del tráfico de la
+red en los encaminadores se utiliza \textit{Cisco NetFlow}\footnote{\url{
+http://www.cisco.com/en/US/docs/ios/11_2/feature/guide/netflow.html}}. Dicha
+herramienta permite dar seguimiento a los paquetes
+\textit{Flow}\cite{Brownlee1999, Rajahalme2004, Quittek2004}, realizando
+resúmenes de los datos que se almacenan en estos a lo largo del tiempo. Además
+brinda posibilidades para la especificación de los paquetes que se desean
+monitorizar, mediante la aplicación de secuencias de filtrado. 
+
+Las herramientas descritas con anterioridad son sumamente útiles en el proceso
+de gestión de redes. Sin embargo, las mismas no son capaces de realizar un
+análisis en profundidad de las trazas de los servicios, que permita detectar de
+forma proactiva algún error o falla en el funcionamiento de la red. Es por este
+motivo que en el Departamento 2 de la Facultad de Matemática y Computación de la
+UH se tomó la decisión de incursionar en una nueva metodología para el análisis
+de las trazas de los servicios que permitiera identificar, proactivamente,
+anomalías dentro de una red.
+ 
+Como fruto de esta investigación se propuso un modelo\cite{Gonzalez2008} capaz
+de detectar anomalías a partir del uso de la minería de datos en las trazas de
+los servicios. Estas técnicas están compuestas por metodologías, aplicaciones y
+tecnologías que permiten reunir, depurar y transformar datos e información no
+estructurada en información estructurada, para su explotación directa o para su
+análisis y conversión en conocimiento y así dar soporte a la toma de decisiones.
+Para lograr este objetivo se definen determinadas variables a tener en cuenta a
+partir de los datos que aparecen en los archivos de trazas y por cada una se
+construye un perfil de comportamiento normal asociado a ella. Luego, se procede
+al procesamiento de los valores de las nuevas trazas para detectar aquellas cuyo
+comportamiento sea anómalo, teniendo en cuenta lo que se conoce como ``normal''
+en la red. Para determinar el perfil del comportamiento ``normal'' de un
+servicio, es necesario, construirlo a partir de su comportamiento a lo largo del
+tiempo, eliminando aquellos valores que aporten ruido, ambiguedad o redundancia;
+mediante técnicas de detección de \textit{outliers}. Estas anomalías son
+notificados a los administradores de la red. 
+
+A modo de prueba de concepto se diseño una plataforma\cite{Gonzalez2008}
+centralizada que comprendía el funcionamiento de este modelo para analizar el
+comportamiento del servicio \textit{proxy} Squid, obteniéndose resultados
+sobresalientes. Por este motivo resulta de interés diseñar un plataforma
+completamente distribuida que comprenda todo el procedimiento planteado en el
+mismo, pero que permita incorporar de forma sencilla el análisis de anomalías
+para un servicio nuevo sin tener que realizar cambios en la estructura del
+sistema o en el funcionamiento del análisis de los servicios previamente
+existentes. Por el papel tan importante que juega el diseño de un sistema
+distribuido en la creación de esta plataforma, a continuación se ofrece una
+noción sobre este tipo de sistemas.
+
+\section{Sistemas distribuidos}
+\label{distributed_systems}
+
+Los sistemas de computadoras se han desarrollado a una velocidad impactante en
+los últimos 50 años. En sus inicios las computadoras eran componentes autónomas
+e independientes que no podían comunicarse unas con otras. Pero la necesidad de
+compartir información entre ellas, llevó al surgimiento de tecnologías que
+permitieran el intercambio de información inicialmente entre máquinas cercanas,
+en una misma red local, y posteriormente con máquinas de cualquier parte del
+mundo. Esto planteó la posibilidad de crear aplicaciones compuestas por
+diferentes computadoras que funcionaran como un sólo sistema consistente, a los
+cuales se les conoce como \emph{sistemas distribuidos}.
+
+En la literatura existen diferentes definiciones de lo que se considera un
+\emph{sistema distribuido}, pero ninguna de estas logra explicar a cabalidad
+dicho paradigma. Por ello para los propósitos de este trabajo nos limitaremos a
+dar una pequeña caracterización de los mismos\cite{Tanenbaum2007}: 
+\begin{quotation}
+ \emph{``Un sistema distribuido es una colección de computadoras independientes
+  que se muestran a sus usuarios como un único sistema
+  consistente.''}
+\end{quotation}
+
+Un sistema distribuido debe ser capaz de ocultar a sus usuarios su estructura
+interna, así como la funcionalidad de cada una de sus componentes y el mecanismo
+de comunicación utilizado entre estas. De ahí que aunque usualmente estén compuestos 
+por varias computadoras y diferentes componentes, para los usuarios finales parezca 
+que están accediendo a un único elemento encargado de todo el procedimiento. Además 
+debe ser fácil de expandir, escalable y, los fallos en alguna de sus estaciones o la 
+pérdida de información debe pasar desapercibida para los usuarios\cite{Tanenbaum2007}.
+
+Estos sistemas han ganado en popularidad en los últimos años, debido a sus
+características y las ventajas que proporciona a los sistemas diseñados bajo
+este paradigma. Sin embargo, lograr que cumplan con todas estas características,
+sin perder de vista el rendimiento del mismo, suele ser bastante difícil; así
+como lograr que los protocolos de seguridad seguidos no permitan intrusiones o
+ataques al mismo.
+
+Los sistemas distribuidos suelen replicar sus componentes con el fin de aumentar
+su escalabilidad y disminuir las probabilidades de que deje de
+funcionar ante la caída de alguno o algunos de sus elementos. Los datos
+almacenados también son replicados en muchas ocasiones para disminuir el nivel
+de sobrecarga de algunas de sus componentes. La replicación de datos
+debe hacerse cuidadosamente pues el sistema debe mantener su consistencia, de
+ahí que esta deba ser consistente también. Luego, en este
+sentido debe garantizarse que ante la petición de un dato siempre se devuelva
+el más actualizado, para ello deben mantenerse todas las copias
+actualizadas aunque los últimos cambios se hayan realizado solamente sobre una
+de las copias. Además los datos actuales deben hacerse de forma que sean el 
+resultado de los cambios realizados de forma secuencial, según
+el momento en que hayan ocurrido, aún cuando estos se hayan hecho
+sobre diferentes copias. Existen diferentes técnicas para realizar una
+replicación de datos consistente, cada sistema utiliza aquella que más se adecua
+a sus características\cite{Tanenbaum2007}. %TODO: Hablar de los procesos en estos sistemas, particularmente de los agentes.
+
+Debido a la importancia que tienen en los \emph{sistemas distribuidos} el
+protocolo de comunicación entre sus componentes, en la sección
+\ref{communication} se profundiza más sobre este tema, y los principales
+mecanismos de comunicación.
+
+\subsection{Mecanismos de Comunicación}
+\label{communication}
+
+Los sistemas distribuidos están generalmente compuestos por varias computadoras
+que funcionan como un único sistema consistente. Luego, resulta necesario contar 
+con un mecanismo de comunicación y/o protocolos que posibiliten el intercambio 
+de datos e informaciones entre dichas componentes. Durante mucho tiempo
+esto era posible mediante el traspaso de mensajes, sin embargo esto no permitía
+establecer un protocolo de comunicación entre las diferentes componentes que
+brindara facilidades para el intercambio entre estas. Además era necesario que
+este permitiera que el sistema mantuviera un funcionamiento en tiempo real. 
+
+Los protocolos propuestos debían abstraerse del tipo de comunicación que se
+utilizaría para la transferencia de datos entre las computadoras donde se
+encuentraran las componentes que estaban intercambiando información. Para ello
+estos debían implementarse a nivel de la capa de aplicación del sistema
+operativo. Estableciendo mecanismos para la comunicación entre componentes de un
+sistema distribuido que tuviesen en cuenta las características del mismo y que
+realizaran de forma transparente para el usuario la comunicación a nivel de capa
+de transporte. A continuación se mencionan algunos de los mecanismos de
+comunicación más utilizados en el diseño de un sistema
+distribuido\cite{Tanenbaum2007}.
+
+\subsubsection{Remote Procedure Call (RPC)}
+Durante mucho tiempo los sistemas distribuidos intercambiaron información
+mediante el traspaso de mensajes; pero esta no establecía un protocolo de
+comunicación entre las diferentes componentes del sistema. Luego, en 1984 una
+manera novedosa de comunicación surgió, bridando una solución a este problema.
+La idea era muy sencilla, permitir a los programas realizar llamadas a
+procedimientos presentes en la misma computadora o en otras computadoras, de
+forma síncrona o asíncrona\cite{Tanenbaum2007}.
+
+Para realizar una llamada a un procedimiento en una máquina desde otra, se
+establece la división de la responsabilidad de la llamada entre las dos
+máquinas. La que realiza la llamada actuará como cliente y la que contiene el
+procedimiento actuará como servidor; de forma tal que podría verse como un
+ejemplo del modelo cliente-servidor. En este modelo el cliente se encarga de
+realizar la llamada del procedimiento especificado, mediante el envío de un
+mensaje con el identificador asociado a este y los parámetros dados, al
+servidor. Este último, por otro lado, es el encargado de resolver las llamadas a
+los procedimientos con los que cuenta, los cuales deben ser conocidos por los
+clientes. Para ello este debe desempaquetar los mensajes recibidos, determinar a
+que función se está llamando, obtener los parámetros y realizar el llamado.
+Luego, se devuelve el resultado de esta operación, mediante el envío de un
+mensaje al cliente que envió dicho paquete\cite{Birrell1984}.
+ 
+Con el objetivo de posibilitar la llamada a procedimientos presentes en la misma
+máquina desde la que el cliente está realizando la llamada, se deben registrar
+dichos procedimientos como \emph{doors}. Luego, a través del sistema operativo
+se realiza una llamada al mismo, de forma que esta es pasada al servidor
+contenido en la misma máquina, el cual devuelve el resultado al sistema y este
+al cliente. Es importante destacar que para poder realizar este tipo de
+comunicación el sistema operativo de la máquina en que se está trabajando debe
+brindar soporte para el trabajo con \emph{doors}\cite{Mitchell1994,
+Hamilton1993}.
+
+\subsubsection{Remote Object Invocation}
+En los sistemas distribuidos, RPC se convirtió en el mecanismo de comunicación
+más utilizado. Por otro lado, el paradigma de programación orientada a objetos
+había ganado en popularidad, y ya formaba parte de varios lenguajes de
+programación. Luego, con la distribución de los sistemas en diferentes
+componentes, que lógicamente podían verse como objetos que se relacionaban entre
+sí, surgió la idea de extender RPC a objetos. De esta forma, se permitiría
+invocar métodos de un objeto ubicado en una máquina, desde otra. Este mecanismo
+es conocido como, \emph{Remote Object Invocation} (ROI) o \emph{Remote Method
+Invocation} (RMI)\cite{Tanenbaum2007}.
+
+Este procedimiento, sigue las mismas ideas de RPC, basando su funcionamiento en
+un modelo cliente-servidor. En RPC, el cliente debe conocer las funciones
+brindadas por el sistema, en este caso más específicamente las brindadas por
+cada componente. Para ello, el cliente contará con una especificación de los
+métodos de cada uno de los objetos que representan a las diferentes componentes
+del sistema; que será brindada mediante la especificación de las interfaces que
+representan a cada uno de estos elementos. De esta manera, un cliente podrá
+invocar un método de un objeto específico, que se encuentre en una computadora
+remota\cite{Tanenbaum2007}.
+
+Actualmente la mayoría de los sistemas distribuidos, siguen un diseño basado en
+agentes, donde su funcionamiento está dado por el comportamiento de estos y el
+intercambio entre ellos. Luego, la representación de estos como objetos se
+impone de forma natural, haciendo de este mecanismo de comunicación una elección
+ideal. Sobre todo cuando los sistemas diseñados pretenden brindar la posibilidad
+de extender de sus funcionalidades, tomando como base las abstracciones o
+generalizaciones ofrecidas para cada una de estas.
+
+\subsubsection{Message-Oriented Comunication}
+Los mecanismos de comunicación basados en \emph{RPC} o \emph{ROI} asumen que la
+componente a la que están realizando una petición se está ejecutando en ese
+momento, lo cual resulta inconveniente para algunas aplicaciones. Ante esta
+problemática se planteó el uso de mecanismos de comunicación orientados a
+mensajes. Con el objetivo de solucionar algunos de los problemas no resueltos
+por \emph{RPC} y \emph{ROI} se diseñaron diferentes modelos de comunicación
+orientados a mensajes\cite{Tanenbaum2007}. 
+
+Los modelos que se diseñaron se centraron en brindar mecanismos de comunicación
+que fueran sincronizados o  asíncronos, trascendientes o persistentes. Por
+supuesto, sin dejar de lado, su principal objetivo; que consiste en permitir la
+ejecución de peticiones a componentes que no se estén ejecutando en el momento
+en que estas son realizadas\cite{Tanenbaum2007}.
+
+Un mecanismo de comunicación sincronizada orientado a mensajes fue la interfaz
+de \textit{sockect}\cite{Besaw1987} introducida por Berkeley UNIX, que era un
+protocolo de comunicación de la capa de transporte. A partir de esta se
+establece un puente de comunicación entre dos computadoras, o componentes de un
+sistema. Cada componente tendrá una interfaz de red y un puerto por el que
+estará escuchando la información enviada por la otra componente con la que se ha
+realizado un enlace. En caso de que la computadora a la que se están enviando
+datos se apagara o desconectara, los datos enviados se perderían y no se
+volverían a enviar\cite{Tanenbaum2007}.
+ 
+Más adelante la necesidad de contar con un mecanismo de comunicación que
+brindara un mayor nivel de abstracción y que fuese independiente del
+\textit{hardware} conllevó a la definición de un protocolo para el traspaso de
+mensajes, conocido como \emph{Message-Passing Protocol} (MPI)\cite{Snir1996}.
+Este protocolo está diseñado para correr aplicaciones en paralelo, de ahí que
+sea catalogado de asícrono; por otro lado es un mecanismo de comunicación
+trascendiente. En MPI cuando se va a enviar un mensaje, este es enviado al
+servidor de ejecución local de dicho protocolo, este es copiado en su
+\textit{buffer} local, a la espera de que sea procesado y enviado posteriormente
+a su destino, una vez que este haya hecho una petición de
+recibimiento\cite{Tanenbaum2007}.
+ 
+Estos dos mecanismos de comunicación anteriormente mencionados no son
+persistentes, una vez que el mensaje es enviado se asume que este llegará a su
+destino y se dará por perdido en caso de que no lo haga. Una posible solución a
+este problema sería almacenar los mensajes y reenviarlos sino se recibe
+confirmación de su llegada. Siguiendo una idea similar a esta se definió un
+mecanismo de comunicación basado en colas (\textit{queques}). Este modelo
+conocido como \emph{Message-Queuing}, mantiene colas locales en cada servidor
+del sistema. Luego, los mensajes son enviados en el orden en que son insertados
+en la cola y se añade en la cola del servidor que lo pueda hacer llegar a su
+destino; este proceso se repite hasta que el mensaje llega a su destinatario.
+Además el mensaje sólo es añadido en un servidor si este está disponible en ese
+momento, sino espera hasta que lo esté y hasta entonces mantiene dicho mensaje
+en la cola. Es importante destacar que un servidor garantiza que los mensajes
+que llegaron a él serán enviados a sus destinatarios, pero no especifica en
+cuanto tiempo ni si este será leído por su componente de destino, esto depende
+del comportamiento de esta última\cite{Tanenbaum2007}.

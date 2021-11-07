@@ -1,0 +1,95 @@
+%cosas ya escritas
+
+%TODO referencia a sitios de emoticones
+  %wikipedia
+  
+  El trabajo con emoticones es más sencillo, puesto que existen varios sitios en internet
+  que se dedican a crear bibliotecas de emoticones. Por lo tanto no es difícil crear
+  un diccionario de emoticones bastante actualizado, ya que estos sitios generalmente
+  agregan los nuevos emoticones que se utilizan en las redes sociales.
+  
+  %TODO referencia a sitios de jerga
+  
+  La jerga se encuentra en el mismo caso que los emoticones, con la diferencia
+  de que los sitios le dan a cada palabra~(de la jerga) un significado usualmente 
+  extenso. Esto no permite intercambiar a la palabra en el texto por su correspondiente 
+  significado. Por lo tanto se requiere crear un diccionario que modifique el significado
+  de cada elemento de la jerga por un significado sencillo que mantenga la idea esencial,
+  sobretodo teniendo en cuenta la opinión que puede expresar. Por ejemplo palabras como 
+  \emph{hacker} no aportan ninguna opinión por lo que no necesitan ser sustituidas en el texto.
+  
+  Los sitios que contienen jerga y emoticones no necesitan ser avalados de manera oficial
+  puesto que su contenido solo se utilizará si es encontrado en el texto. Además el 
+  lenguaje utilizado en las redes sociales no es correcto, ni oficial, sino producto 
+  de lo que se usa en la red. Si los sitios contienen algún emoticón o jerga, es 
+  bastante posible que lo encontremos en los mensajes de texto que se quieren analizar,
+  ya que los usuarios son bastante susceptibles a utilizar los nuevos elementos
+  que circulen en la red.
+  
+ %------------------------------------------------------------------
+ 
+ \subsection{Criterios para etiquetar el corpus}
+%revisados los mensajes 
+%porque se determinaron solo esas clasificaciones
+%que otras pueden tenerse en cuenta 
+%que significa cada clasificación
+%ejemplos
+ 
+ A partir de una revisión general a los mensajes, se determinó
+ clasificar solo en las categorías Objetivo, Subjetivo y esta última en Positivo, Negativo, Neutro.
+ Una gran cantidad de categorías o contar con categorías similares hace más compleja la tarea
+ de clasificación para los seres humanos. Por tanto se determinó utilizar pocas categorías, que resultaran 
+ bien diferentes a los usuarios. Las categorías se especifican como: 
+ 
+ \begin{description}
+  \item[Objetivo:] Son mensajes que plasman un hecho, a menudo noticias.
+  \item[Subjetivo:] Donde se expresa una opinión, se da un criterio.
+  \item[Positivo:] Solo es aplicable a mensajes Subjetivos donde la opinión expresada es
+  Positiva, se considera favorable por el autor.
+  \item[Negativo:] Solo es aplicable a mensajes Subjetivos donde la opinión expresada es
+  Negativa, se considera desfavorable por el autor.
+  \item[Neutro:] Solo es aplicable a mensajes Subjetivos donde se expresa una opinión,
+  pero esta no es negativa, ni positiva.
+ \end{description}
+ 
+%  Además se determinaron un conjunto de categorías, en que pueden clasificarse los mensajes aunque no fueron 
+%  utilizadas en la clasificación final. A menudo estás categorías se solapan con otras y crean confusión. 
+%  Aparecen en el texto fundamentalmente mezcladas con chistes, ironía y metáforas.
+%  
+%  \begin{description}
+%   \item[Interrogativo:] Mensajes en los que se plantean preguntas.
+%   \item[Irónico:] Mensajes donde se expresa una opinión contradictoria.
+%   \item[Compuesto:] Mensajes donde aparece más de una clasificación, por ejemplo se expresan
+%   dos opiniones diferentes.
+%   \item[Reflexivo:] No se da una valoración directa de un tema, pero se expresa una opinión.
+%   A menudo aparecen en forma de concejos o frases célebres.  
+%  \end{description}
+
+Para la creación del corpus se construyó una aplicación sobre la plataforma .Net donde 
+los usuarios pudieran clasificar los
+mensajes rápidamente. Los mensajes clasificados se almacenan en un archivo aparte y 
+se eliminan del conjunto original. 
+El mensaje a clasificar en cada momento se elige aleatoriamente. 
+La aplicación se distribuyó entre 10 usuarios aproximadamente para que realizaran las tareas
+de clasificación. 
+
+%---------------------------------------------------------------------
+Un primer paso en el análisis de opinión es determinar si el texto es objetivo o subjetivo.
+A continuación se analiza la polaridad, es decir, separar las opiniones que expresan algo 
+a favor, de las que expresan algo en contra. 
+
+El trabajo de tesis se propone utilizar diferentes métodos de aprendizaje 
+supervisado para la detección de opiniones en mensajes de \emph{Twitter},
+así como el análisis de polaridad en los mismos. 
+
+Un punto relevante del trabajo es la evaluación de los métodos de clasificación sobre
+idioma español, puesto que la mayoría de los trabajos previos se concentran en el idioma inglés.
+Esto conlleva a la necesidad de crear un corpus en idioma español. Para resolver 
+este problema se propone un corpus de 2000 mensajes de \emph{Twitter} en español,
+clasificados a mano.
+%_--------------------------------------------------------------------
+
+En \emph{Twitter} se denomina a los
+mensajes \emph{tweets} que se muestran en la página del perfil de su autor y son enviados a
+todos los usuarios ``suscritos'' al mismo, los denominados seguidores~(\emph{followers}). 
+
